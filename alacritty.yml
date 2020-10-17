@@ -25,7 +25,7 @@ window:
     x: 2
     y: 2
 
-background_opacity: 0.9
+background_opacity: 0.95
 
 mouse_bindings:
     - { mouse: Left, action: PasteSelection }
