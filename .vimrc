@@ -64,6 +64,10 @@ let mapleader = ',' " Leader
 
 set termguicolors " important!!
 
+" set Vim-specific sequences for RGB colors
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+
 set wildmenu
 set wildmode=longest,list,full
 
