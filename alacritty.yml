@@ -19,3 +19,19 @@ font:
     family: Hack Nerd Font
     # Style can be specified to pick a specific face.
     # style: Italic
+
+window:
+  padding:
+    x: 2
+    y: 2
+
+background_opacity: 0.9
+
+mouse_bindings:
+    - { mouse: Left, action: PasteSelection }
+
+selection:
+  semantic_escape_chars: ",│`|:\"' ()[]{}<>"
+
+cursor:
+  style: Block
