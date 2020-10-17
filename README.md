@@ -4,9 +4,14 @@
 
 ## Requirements
 
-  - Terminal : [Alacritty](https://github.com/alacritty/alacritty/releases)
-  - Font : [Hack Nerd Font](https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Hack#quick-installation)
-  - ZSH : [Oh My ZSH](https://github.com/ohmyzsh/ohmyzsh#basic-installation)
+  - [Alacritty Terminal](https://github.com/alacritty/alacritty/releases)
+  - [Hack Nerd Font](https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Hack#quick-installation)
+  - [Oh My ZSH](https://github.com/ohmyzsh/ohmyzsh#basic-installation)
+  
+  - ZSH
+  - [tmux](https://github.com/tmux/tmux/wiki/Installing)
+  - [The Silver Searcher](https://github.com/ggreer/the_silver_searcher#installing)
+  - [ripgrep](https://github.com/BurntSushi/ripgrep#installation)
 
 ## Files locations
 
