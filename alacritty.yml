@@ -28,7 +28,7 @@ window:
 background_opacity: 0.95
 
 mouse_bindings:
-    - { mouse: Left, action: PasteSelection }
+    - { mouse: Right, action: PasteSelection }
 
 selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>"
