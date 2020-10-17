@@ -1,12 +1,11 @@
 # dotfiles
 
------
-
 ## Requirements
 
   - [Alacritty Terminal](https://github.com/alacritty/alacritty/releases)
   - [Hack Nerd Font](https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Hack#quick-installation)
   - [Oh My ZSH](https://github.com/ohmyzsh/ohmyzsh#basic-installation)
+  - [Oh My Tmux](https://github.com/gpakosz/.tmux#installation)
   
   - ZSH
   - [tmux](https://github.com/tmux/tmux/wiki/Installing)
@@ -19,3 +18,12 @@
   - .zshrc : $HOME/.zshrc
   - custom.zsh-theme : $HOME/.oh-my-zsh/themes/custom.zsh-theme
   - alacritty.yml : $HOME/.config/alacritty/alacritty.yml
+  
+  
+## Cheat Sheets
+
+[Vim](./cheatsheets/vim.md)
+
+[tmux](./cheatsheets/tmux.md)
+
+[qtile](./cheatsheets/qtile.md)
