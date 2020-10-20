@@ -325,6 +325,12 @@ a -> Append a node ( add / before the name and that's a folder )
 <br />
   Format -> Code formatting 
 
+## The Silver Searcher ( ag )
+
+```
+:Ag <pattern> # Use Esc-a if window won't close
+```
+
 ## Git
 
 ### Vim as a mergetool
