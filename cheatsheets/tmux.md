@@ -4,7 +4,11 @@
 
 `<C-b> -> Main trigger sequence for tmux`
 
-i -> Reload conf file
+r -> Reload conf file
+
+```
+:source ~/.tmux.conf
+```
 
 ## Sessions
 
