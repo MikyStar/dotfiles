@@ -26,6 +26,8 @@ Plugin 'junegunn/gv.vim'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-fugitive'
 
+Plugin 'tmux-plugins/vim-tmux-focus-events'
+
 Plugin 'easymotion/vim-easymotion'
 
 Plugin 'junegunn/fzf'
