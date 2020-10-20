@@ -19,6 +19,7 @@
   - custom.zsh-theme : $HOME/.oh-my-zsh/themes/custom.zsh-theme
   - alacritty.yml : $HOME/.config/alacritty/alacritty.yml
   - .tmux.conf : $HOME/.tmux.conf
+  - coc-settings.json : $HOME/.vim/coc-settings.json
   
 ## Cheat Sheets
 
