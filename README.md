@@ -8,8 +8,6 @@
   - [Oh My ZSH](https://github.com/ohmyzsh/ohmyzsh#basic-installation)
   - [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm#installation)
   - [FZF](https://github.com/junegunn/fzf#installation)  
-  
-  - ZSH
   - [tmux](https://github.com/tmux/tmux/wiki/Installing)
   - [The Silver Searcher](https://github.com/ggreer/the_silver_searcher#installing)
   - [ripgrep](https://github.com/BurntSushi/ripgrep#installation)
