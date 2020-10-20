@@ -71,6 +71,9 @@ let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 set wildmenu
 set wildmode=longest,list,full
 
+" Ignored files ; In NerdTree part I imply to ignore those
+set wildignore+=*.swp,*.DS_Store
+
 set showmatch
 set ignorecase
 set infercase
@@ -148,11 +151,9 @@ command Gitunstage GitGutterUndoHunk
 command Gitsplit Gdiffsplit
 
 """"""""""""""""""""" NerdTree
-
-" Go to install nerdtree fonts and select them for the terminal application
-
 map <C-n> :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
+let NERDTreeRespectWildIgnore=1
 
 let g:NERDTreeGitStatusIndicatorMapCustom = {
     \ "Modified"  : "✹",
@@ -297,9 +298,10 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 """""""""""""""""""""" FZF
 nmap <C-p> :FZF .<CR>
 
+"""""""""""""""""""""" Indent Guides
+let g:indent_guides_enable_on_vim_startup = 1
+let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
 
 """"""""""""""""""""""
-
-let g:indent_guides_enable_on_vim_startup = 1
 
 let g:yats_host_keyword = 1
