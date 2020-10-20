@@ -26,5 +26,3 @@
 [Vim](./cheatsheets/vim.md)
 
 [tmux](./cheatsheets/tmux.md)
-
-[qtile](./cheatsheets/qtile.md)
