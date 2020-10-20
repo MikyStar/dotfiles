@@ -60,8 +60,10 @@ Ctrl+r,"-> Paste current register to command
 
 Using * on a word or a visual make it search for the next occurance
 
+```
 /\<i -> Search for words that starts with i
 /i\> -> Search for words that ends with i
+```
 
 ## Commands in Insert mode
 
