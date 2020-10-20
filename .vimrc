@@ -88,6 +88,9 @@ set ts=4 sw=4 noet
 
 set list listchars=extends:>,precedes:<,tab:→\•,eol:↲,nbsp:␣,trail:•,space:•
 
+" Enabled in all modes ( usefull for tmux )
+set mouse=a
+
 """"""""""""""""""""" Theming
 colorscheme gruvbox
 set bg=dark
