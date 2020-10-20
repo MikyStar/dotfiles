@@ -281,6 +281,8 @@ Ctrl+n to toggle
 
 m -> Open context menu to do actions like append node, delete...
 <br />
+o -> Open file in previous window `OR` Expand directory
+<br />
 go -> Open next to NerdTree but keep focus in NerdTree
 <br />
 t -> Open in new Tab
