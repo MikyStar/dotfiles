@@ -371,6 +371,18 @@ In the final merged file ( the view on the bottom ) go to a conflict and execute
 ### Fugitive
 
 :Gdiffsplit -> Make a split with hunks highlighted => `Remapped to :Gitsplit`
+<br />
+`\[c` -> Previous hunk
+<br />
+`\]c` -> Next hunk
+<br />
+`hp` -> Preview hunk
+<br />
+`hs` -> Stage hunk
+<br />
+`hu` -> Undo hank
+<br />
+-> _Use :diffoff then :q to exit_
 
 ### Tsuquyomi
 
