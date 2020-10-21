@@ -376,11 +376,11 @@ In the final merged file ( the view on the bottom ) go to a conflict and execute
 <br />
 `\]c` -> Next hunk
 <br />
-`hp` -> Preview hunk
+`<leader>hp` -> Preview hunk
 <br />
-`hs` -> Stage hunk
+`<leader>hs` -> Stage hunk
 <br />
-`hu` -> Undo hank
+`<leader>hu` -> Undo hank
 <br />
 -> _Use :diffoff then :q to exit_
 
