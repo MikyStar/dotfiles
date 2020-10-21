@@ -1,5 +1,15 @@
 # Git
 
+## References
+
+**HEAD** -> Local current position
+
+origin -> The remote URL, hence a reference to the Git remote host
+
+<position>~ -> Ancestor ~3 or 3 times ~ -> 3 commits before
+
+<commit sha>^ -> Parent n°1 commit
+
 ## Branches
 
 ```sh
@@ -8,6 +18,8 @@ git branch -a # ls all branches
 git checkout -b [name_of_your_new_branch] # Switch to branch
 
 git push -u origin [name of this new branch] # Pushing it to origin
+
+git branch -d <branch> # Delete ( actually not really )
 ```
 
 ## Index area
@@ -47,4 +59,14 @@ git merge [branch I want to merge] --comit
 git log # List of commits with details
 
 git log -S <some words> # Search all commits that have added or deleted <some words>
+```
+
+## Tags
+
+Unique bookmarks in history
+
+```sh
+git tag <tag name> <commit n°, optional> # Tag HEAD or specific commit number
+
+git tag -d <tag name> # Delete
 ```
