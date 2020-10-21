@@ -38,6 +38,10 @@ d -> Detach session
 
 $ -> Rename session
 
+```
+:kill-session
+```
+
 ## Panes
 
 `Use arrows to browse panes`
