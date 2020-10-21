@@ -29,9 +29,20 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 # To use my command tmstp that print a nice timestamp
 alias tmstp="/Users/mike/Documents/Scripts/tmstp.sh"
 
+#################### TMUX
+alias tmuxco="tmux a -t"
+
 #################### Git
 alias status="git status"
 alias gs="git status -s"
+
+alias ga="git add "
+
+alias gc="git commit -m"
+
+alias discard="git checkout -- "
+
+alias unstage="git reset "
 
 # This makes an alias for a push function that can take a message as argument
 function push() {
@@ -47,8 +58,6 @@ function push() {
     git push
 }
 
+alias gl="git log"
+
 alias gtree="git log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all"
-
-alias discard="git checkout -- "
-
-alias unstage="git reset "
