@@ -11,6 +11,7 @@
   - [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm#installation)
   - [FZF](https://github.com/junegunn/fzf#installation)  
   - [tmux](https://github.com/tmux/tmux/wiki/Installing)
+  - [fd](https://github.com/sharkdp/fd#installation)
   - [The Silver Searcher](https://github.com/ggreer/the_silver_searcher#installing)
   - [ripgrep](https://github.com/BurntSushi/ripgrep#installation)
 
