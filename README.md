@@ -29,3 +29,5 @@
 [Vim / NeoVim](./cheatsheets/vim.md)
 
 [tmux](./cheatsheets/tmux.md)
+
+[git](./cheatsheets/git.md)
