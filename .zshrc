@@ -22,6 +22,9 @@ export PATH="/usr/local/opt/bison/bin:$PATH"
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
+# Make FZF ignore some folders
+export FZF_DEFAULT_COMMAND='ag -g ""'
+
 ########################################
 #############  Aliases  ################
 ########################################
