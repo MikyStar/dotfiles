@@ -85,6 +85,12 @@ Ctrl+r,"-> Paste current register to command
 
 Using * on a word or a visual make it search for the next occurance
 
+### With FZF + fd + Rg
+
+Ctrl + p -> mapped to ':Files .' => FuzzyFinder to browse files
+
+Ctrl + f -> mapped to ':Rg' => Search for string ; prefix the string with ' for exact match
+
 ```
 /\<i -> Search for words that starts with i
 /i\> -> Search for words that ends with i
