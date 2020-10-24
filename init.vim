@@ -30,10 +30,12 @@ Plug 'tmux-plugins/vim-tmux-focus-events'
 
 Plug 'easymotion/vim-easymotion'
 
-Plug 'junegunn/fzf'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
 Plug 'frazrepo/vim-rainbow'
+
+Plug 'TaDaa/vimade'
 
 Plug 'nathanaelkane/vim-indent-guides'
 
@@ -177,6 +179,12 @@ let g:coc_global_extensions = [
 	\ 'coc-tsserver',
 	\ 'coc-json',
 	\ 'coc-rome',
+	\ 'coc-yank',
+	\ 'coc-snippet',
+	\ 'coc-prettier',
+	\ 'coc-git',
+	\ 'coc-python',
+	\ 'coc-css',
 	\ ]
 
 " TextEdit might fail if hidden is not set.
@@ -293,15 +301,14 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 
 
 """""""""""""""""""""" FZF
-nmap <C-p> :FZF .<CR>
+nnoremap <C-p> :FZF .<CR>
+nnoremap <C-f> :Rg<CR>
 
 """""""""""""""""""""" Indent Guides
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
 
-""""""""""""""""""""""
-
-let g:yats_host_keyword = 1
+"""""""""""""""""""""" Rainbow
 let g:rainbow_active = 1
 let g:rainbow_load_separately = [
     \ [ '*.*' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
@@ -309,3 +316,12 @@ let g:rainbow_load_separately = [
     \ [ '*.cpp' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
     \ [ '*.{html,htm}' , [['(', ')'], ['\[', '\]'], ['{', '}'], ['<\a[^>]*>', '</[^>]*>']] ],
     \ ]
+
+"""""""""""""""""""""" Vimade
+let g:vimade = {}
+let g:vimade.fadelevel = 0.8
+let g:vimade.groupdiff = 0
+
+""""""""""""""""""""""
+
+let g:yats_host_keyword = 1
