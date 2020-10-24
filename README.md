@@ -5,7 +5,7 @@
   - [Alacritty Terminal](https://github.com/alacritty/alacritty/releases)
   - [Hack Nerd Font](https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Hack#quick-installation)
   - [Vundle](https://github.com/VundleVim/Vundle.vim#quick-start)
-  - [NeoVim](https://github.com/neovim/neovim/wiki/Installing-Neovim#install-from-package)
+  - [NeoVim Nightly](https://github.com/neovim/neovim/wiki/Installing-Neovim#install-from-package)
   - [Plug](https://github.com/junegunn/vim-plug#installation)
   - [Oh My ZSH](https://github.com/ohmyzsh/ohmyzsh#basic-installation)
   - [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm#installation)
