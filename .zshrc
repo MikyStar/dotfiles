@@ -23,7 +23,11 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
 # Make FZF ignore some folders
-export FZF_DEFAULT_COMMAND="fd --type file --hidden --exclude '.git' --exclude 'node_modules'"
+export FZF_DEFAULT_COMMAND="fd --type file --hidden \
+  --exclude .git \
+  --exclude node_modules \
+  --exclude build \
+  --exclude dist"
 
 ########################################
 #############  Aliases  ################
