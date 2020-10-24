@@ -6,6 +6,8 @@
 
 :cd %:p:h -> Change the current directory to current file directory
 
+:f -> Get file path
+
 ## Browsing
 
 Ctrl+W -> Enter window mode
