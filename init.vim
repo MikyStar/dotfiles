@@ -180,7 +180,7 @@ let g:coc_global_extensions = [
 	\ 'coc-json',
 	\ 'coc-rome',
 	\ 'coc-yank',
-	\ 'coc-snippet',
+	\ 'coc-snippets',
 	\ 'coc-prettier',
 	\ 'coc-git',
 	\ 'coc-python',
