@@ -87,11 +87,16 @@ Ctrl+p -> Previous file
 `Also works in visual mode for multiple lines`
 
 Enter -> Open file
+<br />
 - -> Toggle Add(stage) / Reset(unstage) file 
-c -> **:Gcommit**
+<br />
+C -> **:Gcommit** -> Commit window like git commit without '-m'
+<br />
 p -> "Patch" = Start staging hunks in a lousy way, prefer following method :
 
-_Open a file and :Gdiff in it -> next section_
+_Open a file and :Gdiff in it_
+
+:Gedit :<path> -> Open index version of file (:0 for current)
 
 ## Diff view
 
@@ -99,21 +104,26 @@ _Open a file and :Gdiff in it -> next section_
 <br />
 :diffoff -> Quit diff wiew
 
+_Can still run :Gstatus which will bring a new pane up top_
+
 :ls -> Get buffers #
 
 :diffupdate -> Re-evaluate for instance for white lines
 
 :diffget <bufspec if merge> -> Get the diff from other window ; In merge, used in working copy
 <br />
-do -> In 2 way
+-> do -> In 2 way
 
 :diffput <bufspec # if merge> -> Put the diff to other window ; In merge, used in //2 and //3
 <br />
-dp -> In 2 way
-  
+-> dp -> In 2 way
+
+_With Visual mode I can specificly select and write diffget or diffput _
+<br />
 _With '|' I can chain vim commands, for instance I can run an update after a get or put_
  
 \[c -> Previous hank
+<br />
 \]c -> Netx hunk
 
 :only -> Select only current split -> Will finish the merge resolving
@@ -122,9 +132,14 @@ _With '|' I can chain vim commands, for instance I can run an update after a get
 
 ### 2-way diffs ( Working index )
 
-|  target (HEAD) 	|  working copy 	|  	
+| index version  	| working copy  	|  	
 |---	            |---	            |
-| bufspec //2     | file name   	  |
+
+:Gread -> In 2-way will replace the current buffer by the other
+<br />
+:Gwrite -> In 2-way will replace the other buffer by the current buffer
+
+`-> If staying in working copy, :Gread will discard current changes, :Gwrite will stage them`
 
 
 ### 3-way diffs ( Merge conflicts )
@@ -132,5 +147,3 @@ _With '|' I can chain vim commands, for instance I can run an update after a get
 |  target (HEAD) 	|  working copy 	|  merge 	    |   	
 |---	            |---	            |---	        |
 | bufspec //2     | file name   	  | bufspec //3 |
-
-
