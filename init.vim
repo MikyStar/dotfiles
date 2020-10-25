@@ -146,7 +146,7 @@ command Gitnext GitGutterNextHunk
 command Gitprev GitGutterPrevHunk
 command Gitstage GitGutterStageHunk
 command Gitunstage GitGutterUndoHunk
-command Gitsplit Gdiffsplit
+command Gdiff Gdiffsplit
 
 """"""""""""""""""""" NerdTree
 map <C-n> :NERDTreeToggle<CR>
