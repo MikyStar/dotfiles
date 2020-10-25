@@ -141,6 +141,8 @@ Ctrl+W, R -> Swap splits
 
 Ctrl+W, HJKL -> Browse between splits VIM like `Remapped to just Ctrl + HJKL` => 'Window browsing'
 
+:only -> Keep only current pane
+
 ## Browse cursor positions
 
 Ctrl + O -> backward
