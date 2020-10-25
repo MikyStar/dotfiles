@@ -25,6 +25,7 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'junegunn/gv.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-unimpaired'
 
 Plug 'tmux-plugins/vim-tmux-focus-events'
 
