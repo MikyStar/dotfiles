@@ -118,7 +118,7 @@ _Can still run :Gstatus which will bring a new pane up top_
 <br />
 -> dp -> In 2 way
 
-_With Visual mode I can specificly select and write diffget or diffput _
+_With Visual mode I can specificly select and write diffget or diffput_
 <br />
 _With '|' I can chain vim commands, for instance I can run an update after a get or put_
  
@@ -133,7 +133,7 @@ _With '|' I can chain vim commands, for instance I can run an update after a get
 ### 2-way diffs ( Working index )
 
 | index version  	| working copy  	|  	
-|---	            |---	            |
+|---	             |---	            |
 
 :Gread -> In 2-way will replace the current buffer by the other
 <br />
@@ -145,5 +145,51 @@ _With '|' I can chain vim commands, for instance I can run an update after a get
 ### 3-way diffs ( Merge conflicts )
 
 |  target (HEAD) 	|  working copy 	|  merge 	    |   	
-|---	            |---	            |---	        |
+|---	             |---	            |---	         |
 | bufspec //2     | file name   	  | bufspec //3 |
+
+## History
+
+### Browsing revisions
+
+:Glog -> Browse previous revision of current file
+<br />
+`Optional arguments`
+<br />
+-- -> Browse commit messages instead
+<br />
+-x -> x last revisions
+<br />
+--reverse
+<br />
+--until=yesterday
+<br />
+--since=
+
+:copen -> List of revisions (enter to open)
+<br />
+:cnext -> Next version ( older )
+<br />
+-> ]q
+<br />
+:cprev -> Previous version ( newer )
+<br />
+-> \[q
+:cfirst
+<br />
+-> \[Q
+:clast
+<br />
+-> \]Q
+
+:Gedit -> Without argument -> Go back to working copy
+
+### Searching text
+
+:Ggrep <pattern> <opt, branch / sha> -> Search for pattern inside files included in git project or branch or commit
+
+:Glog --grep=<pattern> -- -> Search in commit messages
+
+:Glog -S<pattern> -- -> Search added or removed text `Yes no space after the S`
+
+_Same :copen "QuickFix" system as above_
