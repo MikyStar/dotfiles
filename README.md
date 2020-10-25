@@ -8,6 +8,7 @@
   - [NeoVim Nightly](https://github.com/neovim/neovim/wiki/Installing-Neovim#install-from-package)
   - [Plug](https://github.com/junegunn/vim-plug#installation)
   - [Oh My ZSH](https://github.com/ohmyzsh/ohmyzsh#basic-installation)
+  - [zsh autosuggestions](https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md#oh-my-zsh)
   - [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm#installation)
   - [FZF](https://github.com/junegunn/fzf#installation)  
   - [tmux](https://github.com/tmux/tmux/wiki/Installing)
