@@ -70,3 +70,67 @@ git tag <tag name> <commit n°, optional> # Tag HEAD or specific commit number
 
 git tag -d <tag name> # Delete
 ```
+
+-----
+-----
+
+# Vim Fugitive
+
+# Status
+
+:Gstatus -> Interactive git status
+
+Ctrl+n -> Next file
+<br />
+Ctrl+p -> Previous file
+<br />
+`Also works in visual mode for multiple lines`
+
+Enter -> Open file
+- -> Toggle Add(stage) / Reset(unstage) file 
+c -> **:Gcommit**
+p -> "Patch" = Start staging hunks in a lousy way, prefer following method :
+
+_Open a file and :Gdiff in it -> next section_
+
+## Diff view
+
+:Gdiffsplit -> Mapped to :Gdiff -> Open diff tool
+<br />
+:diffoff -> Quit diff wiew
+
+:ls -> Get buffers #
+
+:diffupdate -> Re-evaluate for instance for white lines
+
+:diffget <bufspec if merge> -> Get the diff from other window ; In merge, used in working copy
+<br />
+do -> In 2 way
+
+:diffput <bufspec # if merge> -> Put the diff to other window ; In merge, used in //2 and //3
+<br />
+dp -> In 2 way
+  
+_With '|' I can chain vim commands, for instance I can run an update after a get or put_
+ 
+\[c -> Previous hank
+\]c -> Netx hunk
+
+:only -> Select only current split -> Will finish the merge resolving
+<br />
+:Gwrite -> Will finish, select only current pane and stage the changes `In working copy, otherwise if I only want to keep the changes in merge and stage that I can go on merge or target and do :Gwrite!`
+
+### 2-way diffs ( Working index )
+
+|  target (HEAD) 	|  working copy 	|  	
+|---	            |---	            |
+| bufspec //2     | file name   	  |
+
+
+### 3-way diffs ( Merge conflicts )
+
+|  target (HEAD) 	|  working copy 	|  merge 	    |   	
+|---	            |---	            |---	        |
+| bufspec //2     | file name   	  | bufspec //3 |
+
+
