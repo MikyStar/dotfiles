@@ -88,9 +88,9 @@ Ctrl+p -> Previous file
 
 Enter -> Open file
 <br />
-- -> Toggle Add(stage) / Reset(unstage) file 
+minus -> Toggle Add(stage) / Reset(unstage) file 
 <br />
-C -> **:Gcommit** -> Commit window like git commit without '-m'
+cc -> **:Gcommit** -> Commit window like git commit without '-m'
 <br />
 p -> "Patch" = Start staging hunks in a lousy way, prefer following method :
 
