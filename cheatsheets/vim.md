@@ -160,6 +160,8 @@ Ctrl + I -> forward
 :bp -> buffer previous
 <br />
 :bd -> Delete buffer
+<br />
+:tab split -> Open buffer in a new tab
 
 ## Registers
 
