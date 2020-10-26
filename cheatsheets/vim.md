@@ -275,7 +275,8 @@ dp → Push the content where the cursor is on the oposite line
 <br />
 [c → Previous diff
 
-[//]: ////////////////////////////////////////////////////////////
+-----
+-----
 
 # Plugins
 
@@ -416,7 +417,14 @@ _TypeScript handling_
 <br />
 :SyntasticInfo -> Display info about the linting of the current file
 
-[//]: ////////////////////////////////////////////////////////////
+-----
+
+### VimSpector ( debugger )
+
+
+
+-----
+-----
 
 # Others
 
