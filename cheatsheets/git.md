@@ -122,9 +122,9 @@ _With Visual mode I can specificly select and write diffget or diffput_
 <br />
 _With '|' I can chain vim commands, for instance I can run an update after a get or put_
  
-\[c -> Previous hank
+\[c -> Previous hunk
 <br />
-\]c -> Netx hunk
+\]c -> Next hunk
 
 :only -> Select only current split -> Will finish the merge resolving
 <br />
@@ -190,6 +190,6 @@ _With '|' I can chain vim commands, for instance I can run an update after a get
 
 :Glog --grep=<pattern> -- -> Search in commit messages
 
-:Glog -S<pattern> -- -> Search added or removed text `Yes no space after the S`
+:Glog -S\<pattern> -- -> Search added or removed text `Yes no space after the S`
 
 _Same :copen "QuickFix" system as above_
