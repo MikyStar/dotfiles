@@ -135,12 +135,9 @@ _With '|' I can chain vim commands, for instance I can run an update after a get
 | index version  	| working copy  	|  	
 |---	             |---	            |
 
-:Gread -> In 2-way will replace the current buffer by the other
+:Gread -> In 2-way will replace the current buffer by the other `-> Dicard`
 <br />
-:Gwrite -> In 2-way will replace the other buffer by the current buffer
-
-`-> If staying in working copy, :Gread will discard current changes, :Gwrite will stage them`
-
+:Gwrite -> In 2-way will replace the other buffer by the current buffer `-> Stage`
 
 ### 3-way diffs ( Merge conflicts )
 
