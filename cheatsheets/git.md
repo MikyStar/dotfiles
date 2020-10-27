@@ -76,7 +76,7 @@ git tag -d <tag name> # Delete
 
 # Vim Fugitive
 
-# Status
+## Status
 
 :Gstatus -> Interactive git status
 
@@ -135,9 +135,9 @@ _With '|' I can chain vim commands, for instance I can run an update after a get
 | index version  	| working copy  	|  	
 |---	             |---	            |
 
-:Gread -> In 2-way will replace the current buffer by the other `-> Dicard`
+:Gread -> In 2-way will replace the current buffer by the other `-> Dicard if focus on working copy`
 <br />
-:Gwrite -> In 2-way will replace the other buffer by the current buffer `-> Stage`
+:Gwrite -> In 2-way will replace the other buffer by the current buffer `-> Stage if focus on working copy`
 
 ### 3-way diffs ( Merge conflicts )
 
