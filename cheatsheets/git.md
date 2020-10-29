@@ -149,7 +149,7 @@ _With '|' I can chain vim commands, for instance I can run an update after a get
 
 ### Browsing revisions
 
-:Glog -> Browse previous revision of current file
+:0Glog -> Browse previous revision of current file
 <br />
 `Optional arguments`
 <br />
