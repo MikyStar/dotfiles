@@ -110,11 +110,14 @@ nnoremap <C-e> 5<C-e>
 nnoremap <C-y> 5<C-y>
 
 " Delete buffer with Ctrl Shift w
-nnoremap <C-S-w> :bd<CR>
 nnoremap <C-tab> :bn<CR>
 nnoremap <C-S-tab> :bp<CR>
 
 set foldmethod=manual "To enable manual split
+
+" Hide whitespaces, tabs ... when inactive pabe
+autocmd BufEnter *.ts,*.tsx,*.js,*.jsx,*.json :set list
+autocmd BufLeave *.ts,*.tsx,*.js,*.jsx,*.json :set nolist
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
