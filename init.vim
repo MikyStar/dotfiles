@@ -336,3 +336,5 @@ let g:vimade.groupdiff = 0
 """"""""""""""""""""""
 
 let g:yats_host_keyword = 1
+
+autocmd TabNewEntered * Startify
