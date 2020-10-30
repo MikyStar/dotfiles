@@ -110,6 +110,7 @@ nnoremap <C-e> 5<C-e>
 nnoremap <C-y> 5<C-y>
 
 " Delete buffer with Ctrl Shift w
+nnoremap <C-q> :bd<CR>
 nnoremap <C-tab> :bn<CR>
 nnoremap <C-S-tab> :bp<CR>
 
