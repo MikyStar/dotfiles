@@ -313,6 +313,8 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 nnoremap <C-p> :FZF .<CR>
 nnoremap <C-f> :Rg<CR>
 
+let g:fzf_layout = { 'down': '~40%' }
+
 """""""""""""""""""""" Indent Guides
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
