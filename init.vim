@@ -74,6 +74,7 @@ set wildignore+=*.swp,*.DS_Store
 set showmatch
 set ignorecase
 set smartcase
+set wildignorecase
 set infercase
 set hlsearch
 set autoindent
@@ -108,6 +109,8 @@ nnoremap <C-H> <C-W><C-H>
 nnoremap <C-e> 5<C-e>
 nnoremap <C-y> 5<C-y>
 
+" Delete buffer with Ctrl Shift w
+nnoremap <C-S-w> :bd<CR>
 set foldmethod=manual "To enable manual split
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
