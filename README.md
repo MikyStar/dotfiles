@@ -11,6 +11,7 @@
   - [zsh autosuggestions](https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md#oh-my-zsh)
   - [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm#installation)
   - [FZF](https://github.com/junegunn/fzf#installation)  
+  - [Bat](https://github.com/sharkdp/bat#installation)
   - [tmux](https://github.com/tmux/tmux/wiki/Installing)
   - [fd](https://github.com/sharkdp/fd#installation)
   - [The Silver Searcher](https://github.com/ggreer/the_silver_searcher#installing)
