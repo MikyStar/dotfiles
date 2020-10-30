@@ -1,12 +1,4 @@
-set nocompatible              " be iMproved, required
-set encoding=UTF-8
-filetype off                  " required
-" set shell=bash
-
 call plug#begin('~/.config/nvim/plugged')
-
-" let Vundle manage Vundle, required
-Plug 'VundleVim/Vundle.vim'
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -38,6 +30,8 @@ Plug 'frazrepo/vim-rainbow'
 
 Plug 'TaDaa/vimade'
 
+Plug 'mhinz/vim-startify'
+
 Plug 'nathanaelkane/vim-indent-guides'
 
 Plug 'nvim-treesitter/nvim-treesitter'
@@ -50,8 +44,6 @@ Plug 'peitalin/vim-jsx-typescript'
 Plug 'maxmellon/vim-jsx-pretty'
 
 call plug#end()            " required
-filetype plugin indent on    " required
-
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -61,12 +53,17 @@ filetype plugin indent on    " required
 
 
 """"""""""""""""""""" General
+let mapleader = ','
 syntax on
+
 set number relativenumber
+
 filetype plugin on
 filetype plugin indent on
+filetype off
 
-let mapleader = ',' " Leader
+set nocompatible
+set encoding=UTF-8
 
 set wildmenu
 set wildmode=longest,list,full
@@ -76,6 +73,7 @@ set wildignore+=*.swp,*.DS_Store
 
 set showmatch
 set ignorecase
+set smartcase
 set infercase
 set hlsearch
 set autoindent
