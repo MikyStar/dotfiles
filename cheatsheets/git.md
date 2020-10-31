@@ -1,5 +1,9 @@
 # Git
 
+## Workflow
+
+![alt text](https://i.stack.imgur.com/TnV5B.png "Git Workflow")
+
 ## References
 
 **HEAD** -> Local current position
