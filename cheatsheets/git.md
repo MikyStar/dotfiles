@@ -97,6 +97,8 @@ minus -> Toggle Add(stage) / Reset(unstage) file
 cc -> **:Gcommit** -> Commit window like git commit without '-m'
 <br />
 p -> "Patch" = Start staging hunks in a lousy way, prefer following method :
+<br />
+q -> Quit status
 
 _Open a file and :Gdiff in it_
 
@@ -165,7 +167,11 @@ _With '|' I can chain vim commands, for instance I can run an update after a get
 <br />
 --until=yesterday
 <br />
---since=
+--since= -> "yesterday", "2 days" ...
+<br />
+-- -> Load all commits into the quickfix list
+<br />
+-- % -> Load all commits that affected the current file into the quickfix list
 
 :copen -> List of revisions (enter to open)
 <br />
