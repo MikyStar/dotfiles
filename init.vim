@@ -116,9 +116,9 @@ nnoremap <C-e> 5<C-e>
 nnoremap <C-y> 5<C-y>
 
 " Delete buffer with Ctrl Shift w
-nnoremap <C-q> :bd<CR>
-nnoremap <C-tab> :bn<CR>
-nnoremap <C-S-tab> :bp<CR>
+nnoremap <leader>w :bd<CR>
+nnoremap <leader>n :bn<CR>
+nnoremap <leader>p :bp<CR>
 
 set foldmethod=manual "To enable manual split
 
@@ -162,6 +162,9 @@ command Gitprev GitGutterPrevHunk
 command Gitstage GitGutterStageHunk
 command Gitunstage GitGutterUndoHunk
 command Gdiff Gdiffsplit
+
+nmap <leader>cn <Plug>(GitGutterNextHunk)
+nmap <leader>cp <Plug>(GitGutterPrevHunk)
 
 """"""""""""""""""""" NerdTree
 map <C-n> :NERDTreeToggle<CR>
@@ -231,10 +234,10 @@ else
   inoremap <silent><expr> <c-@> coc#refresh()
 endif
 
-" Use `[g` and `]g` to navigate diagnostics
+" Navigate Diagnostics 
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
+nmap <leader>dp <Plug>(coc-diagnostic-prev)
+nmap <leader>dn <Plug>(coc-diagnostic-next)
 
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
