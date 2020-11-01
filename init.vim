@@ -226,7 +226,7 @@ endfunction
 
 " Use <c-space> to trigger completion.
 if has('nvim')
-  inoremap <silent><expr> <c-space> coc#refresh()
+  inoremap <silent><expr> <leader><space> coc#refresh()
 else
   inoremap <silent><expr> <c-@> coc#refresh()
 endif
@@ -323,7 +323,7 @@ let g:fzf_layout = { 'down': '~40%' }
 
 """""""""""""""""""""" Indent Guides
 let g:indent_guides_enable_on_vim_startup = 1
-let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
+let g:indent_guides_exclude_filetypes = ['help', 'nerdtree', 'startify']
 
 """""""""""""""""""""" Rainbow
 let g:rainbow_active = 1
