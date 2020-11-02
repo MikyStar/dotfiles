@@ -111,7 +111,7 @@ set foldmethod=manual "To enable manual split
 autocmd BufEnter *.ts,*.tsx,*.js,*.jsx,*.json :set list
 autocmd WinEnter *.ts,*.tsx,*.js,*.jsx,*.json :set list
 autocmd BufLeave *.ts,*.tsx,*.js,*.jsx,*.json :set nolist
-autocmd WinLeave *.ts,*.tsx,*.js,*.jsx,*.json :set list
+autocmd WinLeave *.ts,*.tsx,*.js,*.jsx,*.json :set nolist
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
