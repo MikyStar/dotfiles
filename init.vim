@@ -105,26 +105,13 @@ set guifont=Hack\ Nerd\ Font:h12 "compatible with NerdTree, tabs and arirline
 """""""""""""""""""""" Splits
 set splitbelow
 
-" Remap how to browse between splits
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
-
-" Scroll faster with Ctrl E / Y
-nnoremap <C-e> 5<C-e>
-nnoremap <C-y> 5<C-y>
-
-" Delete buffer with Ctrl Shift w
-nnoremap <leader>w :bd<CR>
-nnoremap <leader><tab> :bn<CR>
-nnoremap <leader><S-tab> :bp<CR>
-
 set foldmethod=manual "To enable manual split
 
 " Hide whitespaces, tabs ... when inactive pabe
 autocmd BufEnter *.ts,*.tsx,*.js,*.jsx,*.json :set list
+autocmd WinEnter *.ts,*.tsx,*.js,*.jsx,*.json :set list
 autocmd BufLeave *.ts,*.tsx,*.js,*.jsx,*.json :set nolist
+autocmd WinLeave *.ts,*.tsx,*.js,*.jsx,*.json :set list
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -147,6 +134,24 @@ function! EnterNormalMode()
 endfunction
 
 tmap <silent> <ScrollWheelUp> <c-w>:call EnterNormalMode()<CR>
+
+" Remap how to browse between splits
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+" Scroll faster with Ctrl E / Y
+nnoremap <C-e> 5<C-e>
+nnoremap <C-y> 5<C-y>
+
+" Delete buffer with Ctrl Shift w
+nnoremap <leader>w :bd<CR>
+nnoremap <leader><tab> :bn<CR>
+nnoremap <leader><S-tab> :bp<CR>
+
+" Clear searchs on Esc
+nnoremap <esc> :noh<return><esc>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -229,7 +234,7 @@ endfunction
 
 " Use <c-space> to trigger completion.
 if has('nvim')
-  inoremap <silent><expr> <leader><space> coc#refresh()
+  inoremap <silent><expr> <c-space> coc#refresh()
 else
   inoremap <silent><expr> <c-@> coc#refresh()
 endif
