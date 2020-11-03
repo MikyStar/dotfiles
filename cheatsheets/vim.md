@@ -141,6 +141,12 @@ Ctrl+W, R -> Swap splits
 
 Ctrl+W, HJKL -> Browse between splits VIM like `Remapped to just Ctrl + HJKL` => 'Window browsing'
 
+_Change split layout_
+<br />
+Ctrl + t ( on first pane ) + Ctrl + H -> Horizontal to vertical
+<br />
+Ctrl + t ( on first pane ) + Ctrl + K -> Vertical to horizontal
+
 :only -> Keep only current pane
 
 ## Browse cursor positions
