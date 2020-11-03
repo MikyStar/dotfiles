@@ -347,6 +347,8 @@ let g:vimade = {}
 let g:vimade.fadelevel = 0.8
 let g:vimade.groupdiff = 0
 
-""""""""""""""""""""""
+"""""""""""""""""""""" Startify
+let g:startify_change_to_vcs_root = 1
 
+"""""""""""""""""""""" YATS
 let g:yats_host_keyword = 1
