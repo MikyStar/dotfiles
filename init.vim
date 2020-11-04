@@ -187,7 +187,7 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
     \ "Staged"    : "✚",
     \ "Untracked" : "✭",
     \ "Renamed"   : "➜",
-    \ "Unmerged"  : "═",
+    \ "Unmerged"  : "☉",
     \ "Deleted"   : "✖",
     \ "Dirty"     : "✗",
     \ "Clean"     : "✔︎",
