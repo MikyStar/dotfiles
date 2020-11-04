@@ -108,10 +108,10 @@ set splitbelow
 set foldmethod=manual "To enable manual split
 
 " Hide whitespaces, tabs ... when inactive pabe
-autocmd BufEnter *.ts,*.tsx,*.js,*.jsx,*.json :set list
-autocmd WinEnter *.ts,*.tsx,*.js,*.jsx,*.json :set list
-autocmd BufLeave *.ts,*.tsx,*.js,*.jsx,*.json :set nolist
-autocmd WinLeave *.ts,*.tsx,*.js,*.jsx,*.json :set nolist
+autocmd BufEnter *.ts,*.tsx,*.js,*.jsx,*.json,*.yaml,*.yml,*.sh,*.py :set list
+autocmd WinEnter *.ts,*.tsx,*.js,*.jsx,*.json,*.yaml,*.yml,*.sh,*.py :set list
+autocmd BufLeave *.ts,*.tsx,*.js,*.jsx,*.json,*.yaml,*.yml,*.sh,*.py :set nolist
+autocmd WinLeave *.ts,*.tsx,*.js,*.jsx,*.json,*.yaml,*.yml,*.sh,*.py :set nolist
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
