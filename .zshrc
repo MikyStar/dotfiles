@@ -1,7 +1,7 @@
 ########################################
-#############  General  ################
+###########  ZSH Plugins  ##############
 ########################################
-#
+
 export ZSH="/Users/mike/.oh-my-zsh"
 
 ZSH_THEME="custom"
@@ -16,6 +16,10 @@ source $ZSH/oh-my-zsh.sh
 # For zsh autosuggestions
 source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
+########################################
+############  Variables  ###############
+########################################
+#
 export PATH="/usr/local/opt/bison/bin:$PATH"
 
 # For nvm -> utility to update node
@@ -23,11 +27,7 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
 # Make FZF ignore some folders
-export FZF_DEFAULT_COMMAND="fd --type file --hidden \
-  --exclude .git \
-  --exclude node_modules \
-  --exclude build \
-  --exclude dist"
+export FZF_DEFAULT_COMMAND="ag"
 
 ########################################
 #############  Aliases  ################
