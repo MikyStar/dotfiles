@@ -344,10 +344,43 @@ a -> Append a node ( add / before the name and that's a folder )
 <br />
   Format -> Code formatting 
 
-## The Silver Searcher ( ag )
+## FZF with Ag
+
+### ag in regular CLI
+
+```sh
+# By default, it respects the .gitignore
+
+ag 'a string' # Recursive search in working dir
+ag 'some *.file' src/files # Regex search in file
+ag -Q '7hi$ $yn7AX' # Literal string
+ag -U 'export default' # Recursive search not taking care of the .gitignore
+```
+
+### With FZF integration
+
+[FZF extended search syntax](https://github.com/junegunn/fzf#search-syntax)
 
 ```
 :Ag <pattern> # Use Esc-a if window won't close
+```
+
+Ctrl+V -> Open file under cursor to a vertical pane
+<br />
+Ctrl+X -> Open file under cursor to a horizontal pane
+<br />
+Ctrl+T -> Open file under cursor to a new tab
+
+Tab -> Add file to quicklist
+
+```
+:copen -> Open quickfix window
+:ccl -> Close quickfix window
+
+[q && ]q -> Quick browse
+[Q && ]Q -> First and last
+
+:ClearQuickFixlist -> Wipe it
 ```
 
 ## Git
