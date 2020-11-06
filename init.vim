@@ -124,6 +124,8 @@ command! ClearReg for i in range(34,122) | silent! call setreg(nr2char(i), []) |
 
 command! ClearQuickfixList cexpr []
 
+command! ClearBuffers bufdo bd
+
 " For Vim integrated terminal :
 "	Scroll up will put in Normal mode
 "	Right click will exit out of Normal mode
