@@ -13,7 +13,6 @@
   - [FZF](https://github.com/junegunn/fzf#installation)  
   - [Bat](https://github.com/sharkdp/bat#installation)
   - [tmux](https://github.com/tmux/tmux/wiki/Installing)
-  - [fd](https://github.com/sharkdp/fd#installation)
   - [The Silver Searcher](https://github.com/ggreer/the_silver_searcher#installing)
   - [ripgrep](https://github.com/BurntSushi/ripgrep#installation)
 
