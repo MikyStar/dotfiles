@@ -120,7 +120,9 @@ autocmd WinLeave *.ts,*.tsx,*.js,*.jsx,*.json,*.yaml,*.yml,*.sh,*.py :set nolist
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Custom command to clear registers
-command! WipeReg for i in range(34,122) | silent! call setreg(nr2char(i), []) | endfor
+command! ClearReg for i in range(34,122) | silent! call setreg(nr2char(i), []) | endfor
+
+command! ClearQuickfixList cexpr []
 
 " For Vim integrated terminal :
 "	Scroll up will put in Normal mode
@@ -331,7 +333,7 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 
 """""""""""""""""""""" FZF
 nnoremap <C-p> :FZF .<CR>
-nnoremap <C-f> :Rg<CR>
+nnoremap <C-f> :Ag<CR>
 
 let g:fzf_layout = { 'down': '~40%' }
 
