@@ -175,6 +175,8 @@ Ctrl + I -> forward
 
 "#p -> Paste content of the # register
 <br />
+"+ -> Clipboard register
+<br />
 kyy -> Copy current line in register k
 <br />
 Kyw -> *Append* current word to register k
