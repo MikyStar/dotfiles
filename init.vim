@@ -334,7 +334,7 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 
 """""""""""""""""""""" FZF
 nnoremap <C-p> :FZF .<CR>
-nnoremap <C-f> :Rg<CR>
+nnoremap <C-f> :Ag<CR>
 
 let g:fzf_layout = { 'down': '~40%' }
 
