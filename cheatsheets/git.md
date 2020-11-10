@@ -24,6 +24,9 @@ git checkout -b [name_of_your_new_branch] # Switch to branch
 git push -u origin [name of this new branch] # Pushing it to origin
 
 git branch -d <branch> # Delete ( actually not really )
+
+# See a file as he is in an other branch
+git show branch:file # Branch could be origin/something
 ```
 
 ## Index area
@@ -55,6 +58,9 @@ git checkout -- . # Discard all changes on '.' location
 ```sh
 # Go to the branch where you want the other branch to be merged in
 git merge [branch I want to merge] --comit
+
+# See conflicting files
+git diff --name-only --diff-filter=U
 ```
 
 ## Review tree
