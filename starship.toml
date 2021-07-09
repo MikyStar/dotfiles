@@ -44,15 +44,15 @@ display_private = true
 format = "[──](white) [■ $version](bold 208)"
 
 [git_status]
-ahead = "$count⇡ "
-behind = "$count⇣ "
-modified = "$count✹ "
+ahead = "$count⇡"
+behind = "$count⇣"
+modified = "$count✹"
 untracked = "$count✭"
-deleted = "$count✖ "
-renamed = "$count➜ "
-staged = "$count✚ "
+deleted = "$count✖"
+renamed = "$count➜"
+staged = "$count✚"
 stashed = ""
-conflicted = "$count☉ "
+conflicted = "$count☉"
 format = '([\[$all_status\]](bold red))'
 
 [git_branch]
