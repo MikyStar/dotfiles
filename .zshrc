@@ -2,9 +2,7 @@
 ###########  ZSH Plugins  ##############
 ########################################
 
-export ZSH="/Users/mike/.oh-my-zsh"
-
-ZSH_THEME="custom"
+export ZSH="$HOME/.oh-my-zsh"
 
 plugins=(
   git
@@ -13,14 +11,13 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
-# For zsh autosuggestions
-source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+# Cloned ZSH plugins
+source $ZSH/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $ZSH/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 ########################################
 ############  Variables  ###############
 ########################################
-#
-export PATH="/usr/local/opt/bison/bin:$PATH"
 
 # For nvm -> utility to update node
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
@@ -32,9 +29,6 @@ export FZF_DEFAULT_COMMAND='ag --hidden --ignore-case --ignore .git -g ""'
 ########################################
 #############  Aliases  ################
 ########################################
-
-# To use my command tmstp that print a nice timestamp
-alias tmstp="/Users/mike/Documents/Scripts/tmstp.sh"
 
 #################### TMUX
 alias tmuxco="tmux a -t"
@@ -69,6 +63,36 @@ alias gl="git log"
 
 alias gtree="git log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all"
 
+alias gtreelong="git log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all"
+
 alias gdiff="git diff"
 
+alias gmerge="git merge --no-ff"
+
 alias conflicts="git diff --name-only --diff-filter=U"
+
+########################################
+############  Functions  ###############
+########################################
+
+# Lets you quit Ranger normally with :q, but changes your location to where browsed in ranger if you quit with Q.
+function ranger {
+    local IFS=$'\t\n'
+    local tempfile="$(mktemp -t tmp.XXXXXX)"
+    local ranger_cmd=(
+                command
+                ranger
+                --cmd="map Q chain shell echo %d > "$tempfile"; quitall"
+    )
+
+    ${ranger_cmd[@]} "$@"
+    if [[ -f "$tempfile" ]] && [[ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]]; then
+                cd -- "$(cat "$tempfile")" || return
+    fi
+    command rm -f -- "$tempfile" 2>/dev/null
+}
+
+####################
+
+# Starship Shell UI
+eval "$(starship init zsh)"
