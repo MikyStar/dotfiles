@@ -17,6 +17,7 @@
   - [tmux](https://github.com/tmux/tmux/wiki/Installing)
   - [The Silver Searcher](https://github.com/ggreer/the_silver_searcher#installing)
   - [ripgrep](https://github.com/BurntSushi/ripgrep#installation)
+  - [Ranger](https://github.com/ranger/ranger#installing)
 
 ## Files locations
 
@@ -28,6 +29,7 @@
   - .tmux.conf : $HOME/.tmux.conf
   - coc-settings.json : $HOME/.vim/coc-settings.json
   - starship.toml : $HOME/.config/starship.toml
+  - rc.conf : $HOME/.config/ranger/rc.conf
   
 ## Cheat Sheets
 
