@@ -70,6 +70,10 @@ alias gmerge="git merge --no-ff"
 
 alias conflicts="git diff --name-only --diff-filter=U"
 
+#################### Others
+alias edit="vim"
+alias sourceShell="source $HOME/.zshrc"
+
 ########################################
 ############  Functions  ###############
 ########################################
