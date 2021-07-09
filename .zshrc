@@ -4,16 +4,15 @@
 
 export ZSH="$HOME/.oh-my-zsh"
 
+# Cloned inside .oh-my-zsh/plugins
 plugins=(
   git
   npm
+  zsh-autosuggestions
+  zsh-syntax-highlightin
 )
 
 source $ZSH/oh-my-zsh.sh
-
-# Cloned ZSH plugins
-source $ZSH/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-source $ZSH/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 ########################################
 ############  Variables  ###############
