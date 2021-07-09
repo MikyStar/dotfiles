@@ -1,0 +1,62 @@
+# https://starship.rs/config/
+
+####################
+
+format = """
+╭───── $username@$hostname ➜ $time $cmd_duration
+├─ $directory $git_branch $git_status $package $nodejs $deno $conda $python $rust
+│
+╰──$character
+"""
+
+####################
+
+[username]
+style_user = "white"
+style_root = "red"
+format = "[$user]($style)"
+show_always = true
+
+[hostname]
+ssh_only = false
+format = "[$hostname](white)"
+
+[character]
+success_symbol = "[❯](white)"
+error_symbol = "[❯](red)"
+
+[time]
+disabled = false
+format = "[$time](grey)"
+
+[directory]
+format = "[$path](blue)"
+truncate_to_repo = false
+truncation_length = 7
+
+[cmd_duration]
+format = "[\\($duration\\)](bold yellow)"
+
+####################
+
+[package]
+display_private = true
+format = "[──](white) [■ $version](bold 208)"
+
+[git_status]
+ahead = "$count⇡ "
+behind = "$count⇣ "
+modified = "$count✹ "
+untracked = "$count✭"
+deleted = "$count✖ "
+renamed = "$count➜ "
+staged = "$count✚ "
+stashed = ""
+conflicted = "$count☉ "
+format = '([\[$all_status\]](bold red))'
+
+[git_branch]
+format = "[──](white) [$symbol$branch](bold fg:133)"
+
+[nodejs]
+format = "[$symbol$version](bold green)"
