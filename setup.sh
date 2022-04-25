@@ -33,9 +33,12 @@ nerdFonts ()
 {
 	echo "##### Nerdfonts"
 
-	mv assets/fonts/* $fontDir
+	cp -f assets/fonts/* $fontDir
 
 	fc-cache -f -v
+
+	echo "'Hack' sould be visible"
+	fc-list | grep "Hack"
 }
 
 starship ()
