@@ -1,15 +1,16 @@
-########################################
+#######################################
 ###########  ZSH Plugins  ##############
 ########################################
 
 export ZSH="$HOME/.oh-my-zsh"
+export ZSH_THEME="custom"
 
 # Cloned inside .oh-my-zsh/plugins
 plugins=(
   git
   npm
   zsh-autosuggestions
-  zsh-syntax-highlightin
+  zsh-syntax-highlighting
 )
 
 source $ZSH/oh-my-zsh.sh

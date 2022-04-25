@@ -30,6 +30,10 @@
   - coc-settings.json : $HOME/.vim/coc-settings.json
   - starship.toml : $HOME/.config/starship.toml
   - rc.conf : $HOME/.config/ranger/rc.conf
+
+## Tmux MEM CPU Widget
+
+Do both build and install routines [from here]((https://github.com/thewtex/tmux-mem-cpu-load#build)
   
 ## Cheat Sheets
 
