@@ -10,7 +10,7 @@
   - [Oh My ZSH](https://github.com/ohmyzsh/ohmyzsh#basic-installation)
   - [Starship](https://starship.rs/guide/#%F0%9F%9A%80-installation)
   - [zsh autosuggestions](https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md#oh-my-zsh)
-  - [zsh syntax highlights](https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md)
+  - [zsh syntax highlights](https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md#oh-my-zsh)
   - [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm#installation)
   - [FZF](https://github.com/junegunn/fzf#installation)  
   - [Bat](https://github.com/sharkdp/bat#installation)
