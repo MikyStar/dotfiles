@@ -1,4 +1,4 @@
-# dotfiles
+ dotfiles
 
 ## Requirements
 
@@ -33,7 +33,7 @@
 
 ## Tmux MEM CPU Widget
 
-Do both build and install routines [from here]((https://github.com/thewtex/tmux-mem-cpu-load#build)
+Do both build and install routines [from here](https://github.com/thewtex/tmux-mem-cpu-load#build)
   
 ## Cheat Sheets
 
