@@ -31,11 +31,12 @@ nerdFonts ()
 {
 	echo "##### Nerdfonts"
 
-	curl -o fonts.zip "https://github.com/source-foundry/Hack/releases/download/v3.003/Hack-v3.003-ttf.zip"
-	unzip fonts.zip
+	curl https://github.com/source-foundry/Hack/releases/download/v3.003/Hack-v3.003-ttf.zip
+	unzip Hack-v3.003-ttf.zip
 
-	rm fonts.zip
+	rm Hack-v3.003-ttf.zip
 	mv ttf/*.ttf $fontDir
+	rm -rf ttf
 
 	fc-cache -f -v
 }
