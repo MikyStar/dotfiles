@@ -13,7 +13,6 @@
 
 # Config
 
-pkgInstall="apt install"
 fontDir="/usr/share/fonts/"
 
 ########################################
@@ -25,15 +24,16 @@ basePkg ()
 
 	echo "##### Base packages"
 
-	eval "$pkgInstall git curl make cmake zsh ranger neovim tmux fzf ag nodejs"
+	apt install git curl make cmake zsh ranger neovim tmux fzf silversearcher-ag nodejs -y
 }
 
 nerdFonts ()
 {
 	echo "##### Nerdfonts"
 
-	curl -LO https://github.com/source-foundry/Hack/releases/download/v3.003/Hack-v3.003-ttf.zip -o fonts.zip
-	unzip fonts.zip
+	curl -LO https://github.com/source-foundry/Hack/releases/download/v3.003/Hack-v3.003-ttf.zip -o fonts.zip \
+		&& unzip fonts.zip
+
 	rm fonts.zip
 	mv ttf/*.ttf $fontDir
 
@@ -44,9 +44,9 @@ starship ()
 {
 	echo "##### Starship"
 
-	curl -sS https://starship.rs/install.sh | sh
+	curl -sS https://starship.rs/install.sh | sh && \
+		mkdir -p ~/.config
 
-	mkdir -p ~/.config
 	cp -f starship.toml ~/.config/starship.toml
 }
 
