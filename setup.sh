@@ -31,8 +31,8 @@ nerdFonts ()
 {
 	echo "##### Nerdfonts"
 
-	curl -LO https://github.com/source-foundry/Hack/releases/download/v3.003/Hack-v3.003-ttf.zip -o fonts.zip \
-		&& unzip fonts.zip
+	curl -o fonts.zip "https://github.com/source-foundry/Hack/releases/download/v3.003/Hack-v3.003-ttf.zip"
+	unzip fonts.zip
 
 	rm fonts.zip
 	mv ttf/*.ttf $fontDir
@@ -44,8 +44,8 @@ starship ()
 {
 	echo "##### Starship"
 
-	curl -sS https://starship.rs/install.sh | sh && \
-		mkdir -p ~/.config
+	curl -sS https://starship.rs/install.sh | sh
+	mkdir -p ~/.config
 
 	cp -f starship.toml ~/.config/starship.toml
 }
@@ -70,6 +70,7 @@ settingTMUX ()
 
 	cp -f .tmux.conf ~/.tmux.conf
 	git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+	tmux source ~/.tmux.conf
 
 	cd ~/.tmux/plugins/tmux-mem-cpu-load
 	cmake .
