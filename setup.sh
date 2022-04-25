@@ -76,7 +76,8 @@ settingTMUX ()
 	cd ~/.tmux/plugins/tmux-mem-cpu-load
 	cmake .
 	make
-	make install
+	sudo -s make install <<<"$password"
+	cd ~/dotfiles
 }
 
 settingRanger ()
