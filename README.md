@@ -1,4 +1,4 @@
- dotfiles
+# Dotfiles
 
 ## Requirements
 
@@ -18,6 +18,13 @@
   - [The Silver Searcher](https://github.com/ggreer/the_silver_searcher#installing)
   - [ripgrep](https://github.com/BurntSushi/ripgrep#installation)
   - [Ranger](https://github.com/ranger/ranger#installing)
+
+## Quick CLI config
+
+```sh
+chmod u+x setup.sh
+./setup.sh
+```
 
 ## Files locations
 
