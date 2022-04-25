@@ -29,6 +29,15 @@ basePkg ()
 	sudo -S apt install git curl make cmake zsh ranger neovim tmux fzf silversearcher-ag nodejs -y <<<"$password"
 }
 
+frenchTimezone ()
+{
+
+	echo "##### French Timezone"
+
+	sudo -s rm /etc/localtime <<<"$password"
+	sudo -s ln -s /usr/share/zoneinfo/Europe/Paris /etc/localtime <<<"$password"
+}
+
 nerdFonts ()
 {
 	echo "##### Nerdfonts"
@@ -118,6 +127,7 @@ settingNeoVim ()
 # Main
 
 basePkg
+frenchTimezone
 nerdFonts
 starship
 usingZsh
