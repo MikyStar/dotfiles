@@ -25,7 +25,7 @@ basePkg ()
 	echo "##### Base packages"
 
 	echo -n "Sudo password:"
-	read password
+	read -s password
 	sudo -S apt install git curl make cmake zsh ranger neovim tmux fzf silversearcher-ag nodejs -y <<<"$password"
 }
 
