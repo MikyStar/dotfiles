@@ -111,10 +111,6 @@ autocmd WinEnter *.ts,*.tsx,*.js,*.jsx,*.json,*.yaml,*.yml,*.sh,*.py :set list
 autocmd BufLeave *.ts,*.tsx,*.js,*.jsx,*.json,*.yaml,*.yml,*.sh,*.py :set nolist
 autocmd WinLeave *.ts,*.tsx,*.js,*.jsx,*.json,*.yaml,*.yml,*.sh,*.py :set nolist
 
-" Startify on every empty buffer
-autocmd BufEnter * if line2byte('.') == -1 && len(tabpagebuflist()) == 1 | Startify | endif
-autocmd BufDelete * if empty(filter(tabpagebuflist(), '!buflisted(v:val)')) | Startify | endif
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""   Commands   """"""""""""""""""""""""""""""""""
