@@ -14,7 +14,10 @@
 # Config
 
 fontDir="/usr/share/fonts/"
-nvimLocation="~/Repos/neovim "
+
+dotfileLocation="~/Repos/dotfiles"
+nvimLocation="~/Repos/neovim"
+i3Location="~/Repos/i3"
 
 ########################################
 
@@ -87,7 +90,7 @@ settingTMUX ()
 	cmake .
 	make
 	sudo -s make install <<<"$password"
-	cd ~/dotfiles
+	cd $dotfileLocation
 }
 
 settingRanger ()
@@ -133,6 +136,25 @@ settingNeoVim ()
 	nvim +PluginInstall +qall
 }
 
+settingI3Gaps ()
+{
+
+	echo "##### i3 Gaps"
+
+	sudo -s apt install meson dh-autoreconf libxcb-keysyms1-dev libpango1.0-dev libxcb-util0-dev xcb libxcb1-dev libxcb-icccm4-dev libyajl-dev libev-dev libxcb-xkb-dev libxcb-cursor-dev libxkbcommon-dev libxcb-xinerama0-dev libxkbcommon-x11-dev libstartup-notification0-dev libxcb-randr0-dev libxcb-xrm0 libxcb-xrm-dev libxcb-shape0 libxcb-shape0-dev <<<"$password"
+
+	mkdir -p $i3Location
+	git clone https://github.com/Airblader/i3.git $i3Location
+
+	cd $i3Location
+	mkdir build && cd build
+	meson ..
+	ninja
+	sudo -s ninja install <<<"$password"
+
+	cd $dotfileLocation
+}
+
 ########################################
 
 # Main
@@ -146,3 +168,4 @@ settingTMUX
 settingRanger
 settingAlacritty
 settingNeoVim
+settingI3Gaps
