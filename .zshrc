@@ -4,6 +4,7 @@
 
 export ZSH="$HOME/.oh-my-zsh"
 export ZSH_THEME="custom"
+export EDITOR="nvim"
 
 # Cloned inside .oh-my-zsh/plugins
 plugins=(
@@ -72,7 +73,7 @@ alias gmerge="git merge --no-ff"
 alias conflicts="git diff --name-only --diff-filter=U"
 
 #################### Others
-alias edit="vim"
+alias edit="$EDITOR"
 alias sourceShell="source $HOME/.zshrc"
 
 ########################################
