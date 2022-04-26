@@ -14,6 +14,7 @@
 # Config
 
 fontDir="/usr/share/fonts/"
+nvimLocation="~/Repos/neovim "
 
 ########################################
 
@@ -26,7 +27,7 @@ basePkg ()
 
 	echo -n "Sudo password:"
 	read -s password
-	sudo -S apt install git curl make cmake zsh ranger neovim tmux fzf silversearcher-ag nodejs -y <<<"$password"
+	sudo -S apt install git curl make cmake zsh ranger tmux fzf silversearcher-ag nodejs npm -y <<<"$password"
 }
 
 frenchTimezone ()
@@ -110,6 +111,14 @@ settingNeoVim ()
 
 	echo "##### NeoVim"
 
+	sudo -s apt-get install ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl doxygen <<<"$password"
+	mkdir -p $nvimLocation
+	git clone https://github.com/neovim/neovim $nvimLocation
+	cd $nvimLocation
+	make CMAKE_INSTALL_PREFIX=$nvimLocation
+	make install
+	sudo -s make install <<<"$password"
+
 	mkdir -p ~/.vim/bundle
 	cp -f .vimrc ~/.vimrc
 	sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
@@ -120,6 +129,8 @@ settingNeoVim ()
 
 	mkdir -p ~/.vim
 	cp -f coc-settings.json ~/.vim/coc-settings.json
+
+	nvim +PluginInstall +qall
 }
 
 ########################################

@@ -36,8 +36,6 @@ Plug 'frazrepo/vim-rainbow'
 
 Plug 'TaDaa/vimade'
 
-Plug 'mhinz/vim-startify'
-
 Plug 'nathanaelkane/vim-indent-guides'
 
 Plug 'nvim-treesitter/nvim-treesitter'
