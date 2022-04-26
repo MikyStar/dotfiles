@@ -77,8 +77,11 @@ alias edit="$EDITOR"
 alias sourceShell="source $HOME/.zshrc"
 
 ########################################
-############  Functions  ###############
+###############  Misc  #################
 ########################################
+
+# Completion for hidden path
+setopt globdots
 
 # Starship Shell UI
 eval "$(starship init zsh)"
