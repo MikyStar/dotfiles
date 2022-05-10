@@ -18,7 +18,7 @@ plugins=(
 source $ZSH/oh-my-zsh.sh
 
 ########################################
-############  Variables  ###############
+###########  Tool Config  ##############
 ########################################
 
 # For nvm -> utility to update node
@@ -87,7 +87,6 @@ alias conflicts="git diff --name-only --diff-filter=U"
 
 #################### Others
 alias edit="$EDITOR"
-alias sourceShell="source $HOME/.zshrc"
 
 ########################################
 ###############  Misc  #################
