@@ -46,6 +46,8 @@ alias discard="git checkout -- "
 
 alias unstage="git reset "
 
+alias updateMaster="git checkout master && git pull"
+
 # This makes an alias for a push function that can take a message as argument
 function push() {
     git add .
