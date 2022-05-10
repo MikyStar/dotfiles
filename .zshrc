@@ -4,6 +4,7 @@
 
 export ZSH="$HOME/.oh-my-zsh"
 export ZSH_THEME="custom"
+export ZSHRC="~/.zshrc"
 export EDITOR="nvim"
 
 # Cloned inside .oh-my-zsh/plugins
@@ -46,7 +47,17 @@ alias discard="git checkout -- "
 
 alias unstage="git reset "
 
-alias updateMaster="git checkout master && git pull"
+updateGit() {
+  if [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]]; then
+    echo "Goes to master, pulls it, then comes back to previous branch and pulls it too"
+  else
+    CURRENT=$(git rev-parse --abbrev-ref HEAD) \
+      && git checkout master \
+      && git pull \
+      && git checkout $CURRENT \
+      && git pull
+  fi
+}
 
 # This makes an alias for a push function that can take a message as argument
 function push() {
