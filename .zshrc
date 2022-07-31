@@ -85,6 +85,10 @@ alias gmerge="git merge --no-ff"
 
 alias conflicts="git diff --name-only --diff-filter=U"
 
+#################### Cli-Task-Manager
+alias t="task"
+alias tt="task --storage $HOME/.global-tasks.json --clear --group state --sort desc"
+
 #################### Others
 alias edit="$EDITOR"
 
