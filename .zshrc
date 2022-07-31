@@ -4,7 +4,7 @@
 
 export ZSH="$HOME/.oh-my-zsh"
 export ZSH_THEME="custom"
-export ZSHRC="~/.zshrc"
+export ZSHRC="$HOME/.zshrc"
 export EDITOR="nvim"
 
 # Cloned inside .oh-my-zsh/plugins
