@@ -9,7 +9,7 @@ window:
   padding:
     x: 2
     y: 2
-  oppacity: 0.95
+  opacity: 0.95
 
 mouse_bindings:
     - { mouse: Right, action: PasteSelection }
