@@ -101,3 +101,11 @@ setopt globdots
 
 # Starship Shell UI
 eval "$(starship init zsh)"
+
+# pnpm
+export PNPM_HOME="/Users/mikeaubenas/Library/pnpm"
+export PATH="$PNPM_HOME:$PATH"
+# pnpm end
+
+# Node version manager
+eval "$(fnm env --use-on-cd)"
