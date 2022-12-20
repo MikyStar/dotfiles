@@ -9,6 +9,7 @@ export EDITOR="nvim"
 
 # Cloned inside .oh-my-zsh/plugins
 plugins=(
+  fzf-tab
   git
   npm
   zsh-autosuggestions
@@ -113,3 +114,4 @@ eval "$(fnm env --use-on-cd)"
 
 ## To have FZF keybindings like writing **/<Tab> would open FZF
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
