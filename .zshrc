@@ -1,4 +1,4 @@
-#######################################
+########################################
 ###########  ZSH Plugins  ##############
 ########################################
 
@@ -27,6 +27,7 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 
 # Make FZF ignore some folders
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore-case --ignore .git -g ""'
+export FZF_COMPLETION_TRIGGER='**'
 
 ########################################
 #############  Aliases  ################
@@ -109,3 +110,6 @@ export PATH="$PNPM_HOME:$PATH"
 
 # Node version manager
 eval "$(fnm env --use-on-cd)"
+
+## To have FZF keybindings like writing **/<Tab> would open FZF
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
