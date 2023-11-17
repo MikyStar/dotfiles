@@ -86,6 +86,9 @@ alias gdiff="git diff"
 
 alias gmerge="git merge --no-ff"
 
+alias gstash="git stash -u"
+alias gpop="git stash pop"
+
 alias conflicts="git diff --name-only --diff-filter=U"
 
 #################### Cli-Task-Manager
