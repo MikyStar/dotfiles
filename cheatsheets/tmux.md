@@ -23,7 +23,7 @@ tmux a -t <session name or number>
 tmux rename-session -t <session name or number> <name>
 
 # ses / session
-tmux kill-ses -t <session name or number> 
+tmux kill-ses -t <session name or number>
 tmux kill-session -a # All except current
 tmux kill-session -a -t mysession # All except my session
 ```
@@ -37,6 +37,12 @@ d -> Detach session
 ) -> Next session
 
 $ -> Rename session
+
+### Tmux Resurect
+
+With this plugin, use `Prefix + Ctrl S` to save a session layout and `Prefix + Ctrl R` to resurect it after the session has been closes
+
+> Those saves are persistant across reboots
 
 ```
 :kill-session
@@ -109,7 +115,7 @@ w -> Browse windows through unflolded session view
 **[Problems with access to MacOS clipboard system](https://gist.github.com/brendanhay/1769870)**
 
 [ -> Enter Copy mode
- 
+
 <no-trigger> q -> Quit Copy mode
 
 <no-trigger> space -> Start selection
@@ -121,7 +127,7 @@ w -> Browse windows through unflolded session view
 <no-trigger> / -> Search forward
 
 <no-trigger> ? -> Search backwards
-  
+
 <no-trigger> <Vim basic moves>
-  
+
 ] -> Paste content where I want in tmux

@@ -2,10 +2,10 @@
 
 ## Requirements
 
+  - [NvDash](https://github.com/MikyStar/NvDash)
   - [Alacritty Terminal](https://github.com/alacritty/alacritty/releases)
   - [Hack Nerd Font](https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Hack#quick-installation)
   - [Vundle](https://github.com/VundleVim/Vundle.vim#quick-start)
-  - [NeoVim Nightly](https://github.com/neovim/neovim/wiki/Installing-Neovim#install-from-package)
   - [Plug](https://github.com/junegunn/vim-plug#installation)
   - [Oh My ZSH](https://github.com/ohmyzsh/ohmyzsh#basic-installation)
   - [Starship](https://starship.rs/guide/#%F0%9F%9A%80-installation)
@@ -30,7 +30,6 @@ chmod u+x setup.sh
 ## Files locations
 
   - .vimrc : $HOME/.vimrc
-  - init.vim : $HOME/.config/nvim/init.vim
   - .zshrc : $HOME/.zshrc
   - custom.zsh-theme : $HOME/.oh-my-zsh/themes/custom.zsh-theme
   - alacritty.yml : $HOME/.config/alacritty/alacritty.yml

@@ -5,7 +5,7 @@
 export ZSH="$HOME/.oh-my-zsh"
 export ZSH_THEME="custom"
 export ZSHRC="$HOME/.zshrc"
-export EDITOR="nvim"
+export EDITOR="$HOME/Repos/neovim/bin/nvim"
 
 # Cloned inside .oh-my-zsh/plugins
 plugins=(
@@ -96,7 +96,7 @@ alias t="task"
 alias tt="task --storage $HOME/.global-tasks.json --clear --group state --sort desc"
 
 #################### Others
-alias edit="$EDITOR"
+alias ed="$EDITOR"
 
 ########################################
 ###############  Misc  #################
@@ -119,3 +119,6 @@ eval "$(fnm env --use-on-cd)"
 ## To have FZF keybindings like writing **/<Tab> would open FZF
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# fnm
+export PATH="/home/user/.local/share/fnm:$PATH"
+eval "`fnm env`"
