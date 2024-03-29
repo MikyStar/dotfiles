@@ -50,32 +50,6 @@ alias discard="git checkout -- "
 
 alias unstage="git reset "
 
-updateGit() {
-  if [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]]; then
-    echo "Goes to master, pulls it, then comes back to previous branch and pulls it too"
-  else
-    CURRENT=$(git rev-parse --abbrev-ref HEAD) \
-      && git checkout master \
-      && git pull \
-      && git checkout $CURRENT \
-      && git pull
-  fi
-}
-
-# This makes an alias for a push function that can take a message as argument
-function push() {
-    git add .
-
-    if [ "$1" != "" ]
-    then
-        git commit -m "$1"
-    else
-        git commit -m update
-    fi
-
-    git push
-}
-
 alias gl="git log"
 
 alias gtree="git log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all"
@@ -88,6 +62,8 @@ alias gmerge="git merge --no-ff"
 
 alias gstash="git stash -u"
 alias gpop="git stash pop"
+alias gpush="git push"
+alias gpull="git pull"
 
 alias conflicts="git diff --name-only --diff-filter=U"
 
