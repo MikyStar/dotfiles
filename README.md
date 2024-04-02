@@ -19,6 +19,7 @@
   - [The Silver Searcher](https://github.com/ggreer/the_silver_searcher#installing)
   - [ripgrep](https://github.com/BurntSushi/ripgrep#installation)
   - [Ranger](https://github.com/ranger/ranger#installing)
+  - [Git Delta](https://dandavison.github.io/delta/installation.html)
 
 ## Quick CLI config
 
@@ -37,6 +38,7 @@ chmod u+x setup.sh
   - coc-settings.json : $HOME/.vim/coc-settings.json
   - starship.toml : $HOME/.config/starship.toml
   - rc.conf : $HOME/.config/ranger/rc.conf
+  - lazygit-config.yml : $HOME/.config/lazygit/config.yml
 
 ## Cheat Sheets
 
