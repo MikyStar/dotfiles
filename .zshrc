@@ -98,3 +98,6 @@ eval "$(fnm env --use-on-cd)"
 # fnm
 export PATH="/home/user/.local/share/fnm:$PATH"
 eval "`fnm env`"
+
+# Rust
+. "$HOME/.cargo/env"
