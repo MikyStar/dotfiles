@@ -89,15 +89,13 @@ export PNPM_HOME="/Users/mikeaubenas/Library/pnpm"
 export PATH="$PNPM_HOME:$PATH"
 # pnpm end
 
-# Node version manager
-eval "$(fnm env --use-on-cd)"
-
 ## To have FZF keybindings like writing **/<Tab> would open FZF
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # fnm
 export PATH="/home/user/.local/share/fnm:$PATH"
-eval "`fnm env`"
+eval "$(fnm env --use-on-cd --shell zsh)"
+
 
 # Rust
 . "$HOME/.cargo/env"
