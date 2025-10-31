@@ -1,11 +1,12 @@
-########################################
+#######################################
 ###########  ZSH Plugins  ##############
 ########################################
 
 export ZSH="$HOME/.oh-my-zsh"
 export ZSH_THEME="custom"
 export ZSHRC="$HOME/.zshrc"
-export EDITOR="$HOME/Repos/neovim/bin/nvim"
+export EDITOR="nvim"
+# export EDITOR="$HOME/Repos/neovim/bin/nvim"
 
 # Cloned inside .oh-my-zsh/plugins
 plugins=(
@@ -18,18 +19,6 @@ plugins=(
 )
 
 source $ZSH/oh-my-zsh.sh
-
-########################################
-###########  Tool Config  ##############
-########################################
-
-# For nvm -> utility to update node
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-
-# Make FZF ignore some folders
-export FZF_DEFAULT_COMMAND='ag --hidden --ignore-case --ignore .git -g ""'
-export FZF_COMPLETION_TRIGGER='**'
 
 ########################################
 #############  Aliases  ################
@@ -74,9 +63,34 @@ alias tt="task --storage $HOME/.global-tasks.json --clear --group state --sort d
 #################### Others
 alias ed="$EDITOR"
 
-########################################
-###############  Misc  #################
-########################################
+#########################################
+#############  Functions  ###############
+#########################################
+
+auto_tmux() {
+  if [ -z "$TMUX" ]; then
+    if tmux has-session -t main 2>/dev/null; then
+      tmux attach -t main
+    else
+      tmux new -s main
+    fi
+  fi
+}
+
+#########################################
+###############  Tools  #################
+#########################################
+
+# If not in a SSH session, auto attach tmux
+[ -n "$SSH_CONNECTION" ] || auto_tmux
+
+# For nvm -> utility to update node
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+# Make FZF ignore some folders
+export FZF_DEFAULT_COMMAND='ag --hidden --ignore-case --ignore .git -g ""'
+export FZF_COMPLETION_TRIGGER='**'
 
 # Completion for hidden path
 setopt globdots
@@ -95,7 +109,6 @@ export PATH="$PNPM_HOME:$PATH"
 # fnm
 export PATH="/home/user/.local/share/fnm:$PATH"
 eval "$(fnm env --use-on-cd --shell zsh)"
-
 
 # Rust
 . "$HOME/.cargo/env"
