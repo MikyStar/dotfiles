@@ -63,6 +63,8 @@ alias tt="task --storage $HOME/.global-tasks.json --clear --group state --sort d
 #################### Others
 alias ed="$EDITOR"
 
+alias pn="pnpm"
+
 #########################################
 #############  Functions  ###############
 #########################################
@@ -109,6 +111,10 @@ export PATH="$PNPM_HOME:$PATH"
 # fnm
 export PATH="/home/user/.local/share/fnm:$PATH"
 eval "$(fnm env --use-on-cd --shell zsh)"
+export PATH="$(npm config get prefix)/bin:$PATH"
 
 # Rust
 . "$HOME/.cargo/env"
+
+# Homebrew
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
