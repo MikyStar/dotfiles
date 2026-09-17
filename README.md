@@ -20,6 +20,7 @@
   - [ripgrep](https://github.com/BurntSushi/ripgrep#installation)
   - [Ranger](https://github.com/ranger/ranger#installing)
   - [Git Delta](https://dandavison.github.io/delta/installation.html)
+  - [Hyprland](https://hypr.land/)
 
 ## Quick CLI config
 
@@ -39,6 +40,7 @@ chmod u+x setup.sh
   - starship.toml : $HOME/.config/starship.toml
   - rc.conf : $HOME/.config/ranger/rc.conf
   - lazygit-config.yml : $HOME/.config/lazygit/config.yml
+  - hypr : $HOME/.config/hypr
 
 ## Cheat Sheets
 
