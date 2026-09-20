@@ -10,7 +10,7 @@ hl.bind(C.mainMod .. " + right", hl.dsp.focus({ direction = "r" }))
 hl.bind(C.mainMod .. " + up",    hl.dsp.focus({ direction = "u" }))
 hl.bind(C.mainMod .. " + down",  hl.dsp.focus({ direction = "d" }))
 
--- Move (swap) the focused window itself: mainMod + SHIFT + direction
+-- Move (swap) the focused window itself in the current workspace: mainMod + SHIFT + direction
 hl.bind(C.mainMod .. " + SHIFT + h",    hl.dsp.window.move({ direction = "l" }))
 hl.bind(C.mainMod .. " + SHIFT + l",    hl.dsp.window.move({ direction = "r" }))
 hl.bind(C.mainMod .. " + SHIFT + k",    hl.dsp.window.move({ direction = "u" }))
@@ -19,6 +19,10 @@ hl.bind(C.mainMod .. " + SHIFT + left",  hl.dsp.window.move({ direction = "l" })
 hl.bind(C.mainMod .. " + SHIFT + right", hl.dsp.window.move({ direction = "r" }))
 hl.bind(C.mainMod .. " + SHIFT + up",    hl.dsp.window.move({ direction = "u" }))
 hl.bind(C.mainMod .. " + SHIFT + down",  hl.dsp.window.move({ direction = "d" }))
+
+-- Move the focused window to workspace: mainMod + alt + direction
+hl.bind(C.mainMod .. " + ALT + right", hl.dsp.window.move({ workspace = "+1" }))
+hl.bind(C.mainMod .. " + ALT + left", hl.dsp.window.move({ workspace = "-1" }))
 
 -- Resize the focused window: mainMod + CTRL + direction, 30px steps
 -- (x and y are both required together — pass 0 for the axis you're not resizing)
