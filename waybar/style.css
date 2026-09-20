@@ -1,0 +1,108 @@
+/* ---------- Palette ---------- */
+@define-color pill rgba(58, 58, 58, 0.88);
+@define-color pill-hover rgba(88, 88, 88, 0.92);
+@define-color text #ffffff;
+@define-color text-dim rgba(255, 255, 255, 0.45);
+@define-color warning #f5c26b;
+@define-color critical #ff6b6b;
+
+/* ---------- Base ---------- */
+* {
+  font-family: "JetBrainsMono Nerd Font", monospace;
+  font-size: 13px;
+  border: none;
+  border-radius: 0;
+  min-height: 0;
+}
+
+/* Transparent bar: only the zones below are visible */
+window#waybar {
+  background: transparent;
+  color: @text;
+}
+
+/* ---------- Zones (one rounded grey pill per module) ---------- */
+#custom-nixos,
+#workspaces,
+#mpris,
+#clock,
+#network,
+#pulseaudio,
+#cpu,
+#memory,
+#temperature,
+#battery,
+#custom-power {
+  background: @pill;
+  color: @text;
+  border-radius: 14px;
+  padding: 0 14px;
+  margin: 4px 3px;
+}
+
+#custom-nixos:hover,
+#mpris:hover,
+#clock:hover,
+#network:hover,
+#pulseaudio:hover,
+#cpu:hover,
+#memory:hover,
+#temperature:hover,
+#battery:hover,
+#custom-power:hover {
+  background: @pill-hover;
+}
+
+/* ---------- Left ---------- */
+#custom-nixos {
+  /* Mono variant: icons are squeezed into one fixed cell, so they stay centered */
+  font-family: "JetBrainsMono Nerd Font Mono", monospace;
+  font-size: 18px;
+  padding: 0 12px;
+}
+
+/* The group is the pill; its children are plain labels inside it */
+#workspaces {
+  padding: 0 8px;
+}
+
+#workspaces label {
+  padding: 0 6px;
+  font-size: 15px;
+  color: @text-dim;
+}
+
+#workspaces label.active {
+  color: @text;
+}
+
+#mpris.paused {
+  color: @text-dim;
+}
+
+#mpris.stopped {
+  padding: 0;
+  margin: 0;
+  background: transparent;
+}
+
+/* ---------- States ---------- */
+#battery.warning {
+  color: @warning;
+}
+
+#battery.critical:not(.charging),
+#temperature.critical {
+  color: @critical;
+}
+
+/* ---------- Tooltips ---------- */
+tooltip {
+  background: rgba(40, 40, 40, 0.95);
+  border-radius: 10px;
+}
+
+tooltip label {
+  color: @text;
+  padding: 2px 4px;
+}
