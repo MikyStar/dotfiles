@@ -1,0 +1,5 @@
+singleton Format Format.qml
+singleton Network Network.qml
+singleton Notifications Notifications.qml
+singleton Popups Popups.qml
+singleton SystemStats SystemStats.qml
