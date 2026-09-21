@@ -11,6 +11,7 @@ Pill {
     visible: Backlight.available
     icon: Icons.brightness(Backlight.level)
     text: Math.round(Backlight.level * 100) + "%"
+    contentSpacing: Theme.iconTextSpacing
     reserveText: "100%"
     active: menu.open
     onClicked: menu.toggle()

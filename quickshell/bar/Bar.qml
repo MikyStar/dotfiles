@@ -25,9 +25,12 @@ Variants {
             anchors.fill: parent
             anchors.margins: Theme.barMargin
 
-            // The center zone stays on the screen's middle unless the left zone is in the way. The right zone
-            // only gets the room left of it (minus `zoneGap`); when its modules need more it scrolls.
-            readonly property real centerX: Math.max((width - center.width) / 2, left.width + Theme.zoneGap)
+            // The center zone stays on the screen's middle, unless the left zone is in the way or the right zone
+            // needs the room to show all its modules: then it moves left, down to `zoneGap` from the left zone.
+            // The right zone only gets the room left of the center (minus `zoneGap`); when its modules need more it scrolls.
+            readonly property real centerX: Math.max(
+                left.width + Theme.zoneGap,
+                Math.min((width - center.width) / 2, width - right.desiredWidth - Theme.zoneGap - center.width))
 
             LeftSection {
                 id: left

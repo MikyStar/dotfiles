@@ -20,6 +20,7 @@ Pill {
     icon: Icons.volume(level, muted)
     iconColor: muted ? Colors.textDim : Colors.accent
     text: Math.round(level * 100) + "%"
+    contentSpacing: Theme.iconTextSpacing
     reserveText: "100%"
     active: menu.open
     onClicked: mouse => {

@@ -4,9 +4,11 @@ import qs.style
 import qs.bar.components
 import qs.bar.services
 
-// Bell with a count badge (badge only while there are notifications). Always shown so the center zone keeps its size.
+// Bell with a count badge. Only shown while there are unseen notifications (or its menu is open).
 Item {
     id: root
+
+    visible: Notifications.unseen > 0 || menu.open
 
     implicitWidth: pill.implicitWidth
     implicitHeight: pill.implicitHeight
@@ -20,6 +22,7 @@ Item {
         PopupMenu {
             id: menu
             anchorItem: pill
+            onOpenChanged: if (open) Notifications.markSeen()
 
             RowLayout {
                 Layout.fillWidth: true
@@ -115,7 +118,7 @@ Item {
     }
 
     Rectangle {
-        visible: Notifications.count > 0
+        visible: Notifications.unseen > 0
         anchors.top: pill.top
         anchors.right: pill.right
         anchors.topMargin: -2
@@ -128,7 +131,7 @@ Item {
         Text {
             id: badgeText
             anchors.centerIn: parent
-            text: Notifications.count
+            text: Notifications.unseen
             color: "#101018"
             font.family: Theme.fontFamily
             font.pixelSize: 10

@@ -9,6 +9,7 @@ Pill {
     icon: Icons.memory
     iconColor: SystemStats.ramUsage > 90 ? Colors.critical : Colors.accent
     text: Math.round(SystemStats.ramUsage) + "%"
+    contentSpacing: Theme.iconTextSpacing
     reserveText: "100%"
 
     PopupMenu {

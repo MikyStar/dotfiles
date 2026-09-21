@@ -9,6 +9,7 @@ Pill {
     icon: Icons.thermometer
     iconColor: SystemStats.cpuTemp > 85 ? Colors.critical : SystemStats.cpuTemp > 70 ? Colors.warn : Colors.accent
     text: Math.round(SystemStats.cpuTemp) + "°C"
+    contentSpacing: Theme.iconTextSpacing
     reserveText: "100°C"
 
     PopupMenu {

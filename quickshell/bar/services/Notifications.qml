@@ -10,6 +10,13 @@ Singleton {
 
     readonly property var model: server.trackedNotifications
     readonly property int count: server.trackedNotifications.values.length
+    // Notifications that arrived since the list was last opened (and are still there).
+    readonly property int unseen: Math.min(_unseen, count)
+    property int _unseen: 0
+
+    function markSeen() {
+        _unseen = 0;
+    }
 
     function clear() {
         for (const n of [...server.trackedNotifications.values])
@@ -21,6 +28,9 @@ Singleton {
         keepOnReload: true
         bodySupported: true
         actionsSupported: true
-        onNotification: n => n.tracked = true
+        onNotification: n => {
+            n.tracked = true;
+            root._unseen++;
+        }
     }
 }

@@ -14,6 +14,9 @@ Rectangle {
     // Longer text is elided at this width (-1: no limit).
     property real maxTextWidth: -1
     property color iconColor: Colors.accent
+    property color textColor: Colors.text
+    property int padding: Theme.pillPadding
+    property int contentSpacing: Theme.pillSpacing
     property bool active: false
     // Only pills that react to the wheel swallow it; the others let it reach a parent (e.g. a scrolling bar section).
     property bool wheelEnabled: false
@@ -25,7 +28,7 @@ Rectangle {
     signal scrolled(int delta)
 
     implicitHeight: Theme.pillHeight
-    implicitWidth: row.implicitWidth + Theme.pillPadding * 2
+    implicitWidth: row.implicitWidth + padding * 2
     radius: Theme.pillRadius
     color: hovered || active ? Colors.pillHover : Colors.pill
     border.color: Colors.pillBorder
@@ -53,7 +56,7 @@ Rectangle {
     RowLayout {
         id: row
         anchors.centerIn: parent
-        spacing: Theme.pillSpacing
+        spacing: root.contentSpacing
 
         Text {
             visible: root.icon !== ""
@@ -70,7 +73,7 @@ Rectangle {
                 return root.maxTextWidth > 0 ? Math.min(w, root.maxTextWidth) : w;
             }
             text: root.text
-            color: Colors.text
+            color: root.textColor
             font.family: Theme.fontFamily
             font.pixelSize: Theme.fontSize
             horizontalAlignment: Text.AlignRight

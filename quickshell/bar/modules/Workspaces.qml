@@ -7,6 +7,9 @@ import qs.bar.components
 Pill {
     id: root
 
+    padding: 4
+    contentSpacing: 2
+
     // The workspace/window lists and their IPC data are only re-read on some events, so a window
     // opening, closing or moving would leave the icons stale. Re-read them on every such event.
     Connections {

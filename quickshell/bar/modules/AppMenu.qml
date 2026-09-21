@@ -13,6 +13,7 @@ Pill {
         .sort((a, b) => a.name.localeCompare(b.name))
 
     icon: Icons.nixos
+    iconColor: Colors.text
     active: menu.open
     onClicked: menu.toggle()
 

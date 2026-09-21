@@ -11,12 +11,17 @@ Pill {
     readonly property var device: UPower.displayDevice
     readonly property real percent: device.percentage * 100
     readonly property bool charging: device.state === UPowerDeviceState.Charging
+    // On mains power. A full battery reports "fully charged" rather than "charging", but should still show the bolt.
+    readonly property bool pluggedIn: !UPower.onBattery
+    readonly property bool low: !pluggedIn && percent <= 20
     readonly property real seconds: charging ? device.timeToFull : device.timeToEmpty
 
     visible: device.ready && device.isPresent
-    icon: Icons.battery(percent, charging)
-    iconColor: charging ? Colors.good : percent <= 15 ? Colors.critical : percent <= 30 ? Colors.warn : Colors.accent
+    icon: Icons.battery(percent, pluggedIn)
+    iconColor: low ? Colors.critical : percent <= 30 && !pluggedIn ? Colors.warn : Colors.accent
+    textColor: low ? Colors.critical : Colors.text
     text: Math.round(percent) + "%"
+    contentSpacing: Theme.iconTextSpacing
     reserveText: "100%"
 
     PopupMenu {
@@ -24,8 +29,9 @@ Pill {
         open: root.hovered
         grabFocus: false
 
-        MenuHeader { text: root.charging ? "Charging" : "On battery" }
+        MenuHeader { text: root.charging ? "Charging" : root.pluggedIn ? "Plugged in" : "On battery" }
         InfoRow {
+            visible: !root.pluggedIn || root.charging
             label: root.charging ? "Time to full" : "Time remaining"
             value: root.seconds > 0 ? Format.duration(root.seconds) : "Calculating…"
         }

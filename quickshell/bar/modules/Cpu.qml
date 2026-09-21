@@ -10,6 +10,7 @@ Pill {
     icon: Icons.cpu
     iconColor: SystemStats.cpuUsage > 90 ? Colors.critical : Colors.accent
     text: Math.round(SystemStats.cpuUsage) + "%"
+    contentSpacing: Theme.iconTextSpacing
     reserveText: "100%"
 
     PopupMenu {
