@@ -17,6 +17,8 @@ Singleton {
     readonly property int pillPadding: 12
     readonly property int pillSpacing: 6
     readonly property int sectionSpacing: 8
+    // Minimum free space between the left, center and right zones.
+    readonly property int zoneGap: 24
 
     // Popups
     readonly property int popupGap: 8

@@ -8,6 +8,7 @@ Singleton {
     id: root
 
     property real cpuUsage: 0      // %
+    property var coreUsage: []     // % per core
     property real load1: 0
     property real ramUsage: 0      // %
     property real ramUsedGb: 0
@@ -17,16 +18,27 @@ Singleton {
     property real txSpeed: 0       // bytes/s
 
     property var _lastCpu: null
+    property var _lastCores: []
     property var _lastNet: null
 
     function _updateCpu() {
         statFile.reload();
-        const f = statFile.text().split("\n")[0].trim().split(/\s+/).slice(1).map(Number);
-        const idle = f[3] + f[4];
-        const total = f.reduce((a, b) => a + b, 0);
-        if (_lastCpu && total > _lastCpu.total)
-            cpuUsage = 100 * (1 - (idle - _lastCpu.idle) / (total - _lastCpu.total));
-        _lastCpu = { idle, total };
+        // Lines: "cpu  ..." (aggregate) then "cpu0 ...", "cpu1 ...", one per core.
+        const times = line => {
+            const f = line.trim().split(/\s+/).slice(1).map(Number);
+            return { idle: f[3] + f[4], total: f.reduce((a, b) => a + b, 0) };
+        };
+        const usage = (now, last) => last && now.total > last.total
+            ? 100 * (1 - (now.idle - last.idle) / (now.total - last.total)) : 0;
+
+        const lines = statFile.text().split("\n");
+        const all = times(lines[0]);
+        cpuUsage = _lastCpu ? usage(all, _lastCpu) : cpuUsage;
+        _lastCpu = all;
+
+        const cores = lines.filter(l => /^cpu\d/.test(l)).map(times);
+        coreUsage = cores.map((c, i) => usage(c, _lastCores[i]));
+        _lastCores = cores;
 
         loadFile.reload();
         load1 = parseFloat(loadFile.text().split(" ")[0]) || 0;

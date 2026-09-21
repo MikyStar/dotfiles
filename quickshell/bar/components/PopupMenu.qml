@@ -15,6 +15,10 @@ PanelWindow {
     property bool open: false
     // Click-outside dismissal + one-at-a-time. Disable for hover tooltips.
     property bool grabFocus: true
+    // Needed by menus with a text field; other menus never take keyboard input.
+    property bool takesKeyboard: false
+    // Popups never get narrower than this, so changing values don't resize (and re-center) them.
+    property real minContentWidth: 200
 
     default property alias content: body.data
 
@@ -40,7 +44,7 @@ PanelWindow {
     exclusionMode: ExclusionMode.Ignore
     WlrLayershell.namespace: "qs-popup"
     WlrLayershell.layer: WlrLayer.Overlay
-    WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
+    WlrLayershell.keyboardFocus: takesKeyboard ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
 
     anchors { top: true; left: true }
     margins.top: Theme.popupTop
@@ -58,7 +62,7 @@ PanelWindow {
     Rectangle {
         id: surface
         anchors.fill: parent
-        implicitWidth: body.implicitWidth + Theme.popupPadding * 2
+        implicitWidth: Math.max(body.implicitWidth, root.minContentWidth) + Theme.popupPadding * 2
         implicitHeight: body.implicitHeight + Theme.popupPadding * 2
         radius: Theme.popupRadius
         color: Colors.panel

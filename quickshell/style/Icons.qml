@@ -10,15 +10,22 @@ Singleton {
     readonly property string wifi: "\uf1eb"
     readonly property string bluetooth: "\uf293"
     readonly property string cpu: "\uf2db"
-    readonly property string memory: "\udb80\udf5b" // nf-md-memory, outside the BMP so written as a surrogate pair
+    readonly property string memory: "\uefc5"
     readonly property string thermometer: "\uf2c9"
     readonly property string power: "\uf011"
     readonly property string music: "\uf001"
+    readonly property string nixos: "\uf313"
 
     // Volume
     readonly property string volumeHigh: "\uf028"
     readonly property string volumeLow: "\uf027"
     readonly property string volumeOff: "\uf026"
+
+    // Brightness (nf-md-brightness_4..7, outside the BMP so written as surrogate pairs)
+    readonly property string brightnessLow: "\udb80\udcdd"
+    readonly property string brightnessMedium: "\udb80\udcde"
+    readonly property string brightnessHigh: "\udb80\udcdf"
+    readonly property string brightnessFull: "\udb80\udce0"
 
     // Battery
     readonly property string batteryFull: "\uf240"
@@ -53,6 +60,16 @@ Singleton {
         if (muted || level <= 0)
             return volumeOff;
         return level > 0.5 ? volumeHigh : volumeLow;
+    }
+
+    function brightness(level: real): string {
+        if (level > 0.85)
+            return brightnessFull;
+        if (level > 0.6)
+            return brightnessHigh;
+        if (level > 0.25)
+            return brightnessMedium;
+        return brightnessLow;
     }
 
     function battery(percent: real, charging: bool): string {

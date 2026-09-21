@@ -17,6 +17,7 @@ Pill {
     icon: Icons.battery(percent, charging)
     iconColor: charging ? Colors.good : percent <= 15 ? Colors.critical : percent <= 30 ? Colors.warn : Colors.accent
     text: Math.round(percent) + "%"
+    reserveText: "100%"
 
     PopupMenu {
         anchorItem: root

@@ -9,12 +9,12 @@ Pill {
     icon: Icons.thermometer
     iconColor: SystemStats.cpuTemp > 85 ? Colors.critical : SystemStats.cpuTemp > 70 ? Colors.warn : Colors.accent
     text: Math.round(SystemStats.cpuTemp) + "°C"
-    active: menu.open
-    onClicked: menu.toggle()
+    reserveText: "100°C"
 
     PopupMenu {
-        id: menu
         anchorItem: root
+        open: root.hovered
+        grabFocus: false
 
         MenuHeader { text: "CPU temperature" }
         InfoRow { label: "Current"; value: SystemStats.cpuTemp.toFixed(1) + "°C" }

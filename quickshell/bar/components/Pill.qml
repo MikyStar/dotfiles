@@ -8,8 +8,15 @@ Rectangle {
 
     property string icon: ""
     property string text: ""
+    // Widest value `text` will take (e.g. "100%"): the pill is sized for it, so it doesn't resize as the value changes.
+    // The text is right-aligned inside that width.
+    property string reserveText: ""
+    // Longer text is elided at this width (-1: no limit).
+    property real maxTextWidth: -1
     property color iconColor: Colors.accent
     property bool active: false
+    // Only pills that react to the wheel swallow it; the others let it reach a parent (e.g. a scrolling bar section).
+    property bool wheelEnabled: false
     readonly property bool hovered: hover.hovered
 
     default property alias content: row.data
@@ -32,6 +39,7 @@ Rectangle {
     }
 
     WheelHandler {
+        enabled: root.wheelEnabled
         onWheel: event => root.scrolled(event.angleDelta.y)
     }
 
@@ -56,11 +64,24 @@ Rectangle {
         }
 
         Text {
-            visible: root.text !== ""
+            visible: root.text !== "" || root.reserveText !== ""
+            Layout.preferredWidth: {
+                const w = Math.max(reserved.advanceWidth, Math.ceil(implicitWidth));
+                return root.maxTextWidth > 0 ? Math.min(w, root.maxTextWidth) : w;
+            }
             text: root.text
             color: Colors.text
             font.family: Theme.fontFamily
             font.pixelSize: Theme.fontSize
+            horizontalAlignment: Text.AlignRight
+            elide: Text.ElideRight
+
+            TextMetrics {
+                id: reserved
+                text: root.reserveText
+                font.family: Theme.fontFamily
+                font.pixelSize: Theme.fontSize
+            }
         }
     }
 }

@@ -20,6 +20,7 @@ Pill {
     icon: Icons.volume(level, muted)
     iconColor: muted ? Colors.textDim : Colors.accent
     text: Math.round(level * 100) + "%"
+    reserveText: "100%"
     active: menu.open
     onClicked: mouse => {
         if (mouse.button === Qt.RightButton && sink?.audio)
@@ -27,6 +28,7 @@ Pill {
         else
             menu.toggle();
     }
+    wheelEnabled: true
     onScrolled: delta => setLevel(level + (delta > 0 ? 0.05 : -0.05))
 
     PwObjectTracker { objects: [root.sink] }

@@ -4,11 +4,10 @@ import qs.style
 import qs.bar.components
 import qs.bar.services
 
-// Bell with a count badge; only shown while there are notifications.
+// Bell with a count badge (badge only while there are notifications). Always shown so the center zone keeps its size.
 Item {
     id: root
 
-    visible: Notifications.count > 0
     implicitWidth: pill.implicitWidth
     implicitHeight: pill.implicitHeight
 
@@ -36,6 +35,14 @@ Item {
                         onClicked: Notifications.clear()
                     }
                 }
+            }
+
+            Text {
+                visible: Notifications.count === 0
+                text: "No notifications"
+                color: Colors.textDim
+                font.family: Theme.fontFamily
+                font.pixelSize: Theme.fontSize
             }
 
             ListView {
@@ -108,6 +115,7 @@ Item {
     }
 
     Rectangle {
+        visible: Notifications.count > 0
         anchors.top: pill.top
         anchors.right: pill.right
         anchors.topMargin: -2
@@ -125,14 +133,6 @@ Item {
             font.family: Theme.fontFamily
             font.pixelSize: 10
             font.bold: true
-        }
-    }
-
-    Connections {
-        target: Notifications
-        function onCountChanged() {
-            if (Notifications.count === 0)
-                menu.close();
         }
     }
 }

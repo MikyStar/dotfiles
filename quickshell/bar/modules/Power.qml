@@ -8,7 +8,6 @@ Pill {
     id: root
 
     icon: Icons.power
-    iconColor: Colors.critical
     active: menu.open
     onClicked: menu.toggle()
 

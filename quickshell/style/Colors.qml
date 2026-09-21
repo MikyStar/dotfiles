@@ -14,11 +14,15 @@ Singleton {
     readonly property color itemHover: Qt.rgba(1, 1, 1, 0.14)
 
     // Text
-    readonly property color text: "#e6e6ea"
-    readonly property color textDim: "#9a9aa4"
+    readonly property color text: "#b3b3b3"
+    readonly property color textDim: "#7d7d7d"
+
+    readonly property color scrollbar: Qt.rgba(1, 1, 1, 0.35)
+    // Glow behind the app icons of the workspace indicator.
+    readonly property color iconShadow: "#050505"
 
     // Accents
-    readonly property color accent: "#8fb4ff"
+    readonly property color accent: "#525252"
     readonly property color good: "#8fd18f"
     readonly property color warn: "#f0c674"
     readonly property color critical: "#f07178"

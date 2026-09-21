@@ -6,6 +6,7 @@ import qs.bar.modules
 RowLayout {
     spacing: Theme.sectionSpacing
 
+    AppMenu {}
     Workspaces {}
     Media {}
 }
