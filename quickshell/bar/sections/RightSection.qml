@@ -41,8 +41,7 @@ RowLayout {
 
             Wifi {}
             BluetoothStatus {}
-            Volume {}
-            Brightness {}
+            VolumeBrightness {}
             Cpu {}
             Ram {}
             Temperature {}

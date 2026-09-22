@@ -84,7 +84,7 @@ Pill {
         InfoRow {
             visible: root.player?.length > 0
             label: root.player?.identity ?? ""
-            value: `${Format.duration(root.elapsed)} / ${Format.duration(root.player?.length ?? 0)}`
+            value: `${Format.clock(root.elapsed)} / ${Format.clock(root.player?.length ?? 0)}`
         }
     }
 
