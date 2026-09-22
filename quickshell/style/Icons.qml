@@ -48,6 +48,7 @@ Singleton {
 
     // Misc
     readonly property string dot: "\uf111"
+    readonly property string dotEmpty: "\uf10c"
     readonly property string arrowDown: "\uf063"
     readonly property string arrowUp: "\uf062"
     readonly property string chevronLeft: "\uf053"
@@ -70,6 +71,59 @@ Singleton {
         if (level > 0.25)
             return brightnessMedium;
         return brightnessLow;
+    }
+
+    // App icons for the workspace indicator (one window per workspace shows its app's glyph instead of a dot).
+    readonly property string appFirefox: "\uf269"
+    readonly property string appTor: "\uf1d5"
+    readonly property string appDocker: "\uf21f"
+    readonly property string appTerminal: "\uf120"
+    readonly property string appFiles: "\uf07b"
+    readonly property string appVlc: "\uf008"
+    readonly property string appChrome: "\uf268"
+    readonly property string appCode: "\uf0da"
+    readonly property string appSpotify: "\uf1bc"
+    readonly property string appDiscord: "\uf1ff"
+    readonly property string appSteam: "\uf1b6"
+    readonly property string appMail: "\uf0e0"
+    readonly property string appSettings: "\uf013"
+    readonly property string appUnknown: "\uf128"
+
+    // Substring matches against a window's app id/class (lowercased), checked in order. First match wins.
+    readonly property var _appMap: [
+        [["firefox"], appFirefox],
+        [["tor browser", "torbrowser"], appTor],
+        [["docker"], appDocker],
+        [["kitty", "alacritty", "foot", "wezterm", "xterm", "konsole", "gnome-terminal", "terminal"], appTerminal],
+        [["nautilus", "org.gnome.files", "thunar", "nemo", "pcmanfm", "dolphin", "file-manager", "files"], appFiles],
+        [["vlc"], appVlc],
+        [["chromium", "google-chrome", "chrome"], appChrome],
+        [["code", "vscode", "codium"], appCode],
+        [["spotify"], appSpotify],
+        [["discord"], appDiscord],
+        [["steam"], appSteam],
+        [["thunderbird", "mail"], appMail],
+        [["gnome-control-center", "settings"], appSettings],
+    ]
+
+    // Maps a window's app id/class to a Nerd Font glyph, falling back to a question mark when unmapped.
+    function app(appClass: string): string {
+        const cls = appClass.toLowerCase();
+        for (const entry of _appMap) {
+            const [patterns, icon] = entry;
+            if (patterns.some(p => cls.includes(p)))
+                return icon;
+        }
+        return appUnknown;
+    }
+
+    // Icons that look cramped when they land against a pill's rounded edge (e.g. the first/last
+    // workspace in the bar) and want a bit more horizontal padding on that side. Add more icons
+    // here as the same issue shows up elsewhere.
+    readonly property var edgePaddingIcons: [appTerminal]
+
+    function needsEdgePadding(icon: string): bool {
+        return edgePaddingIcons.includes(icon);
     }
 
     function battery(percent: real, charging: bool): string {

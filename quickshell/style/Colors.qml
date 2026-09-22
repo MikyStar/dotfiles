@@ -18,8 +18,6 @@ Singleton {
     readonly property color textDim: "#7d7d7d"
 
     readonly property color scrollbar: Qt.rgba(1, 1, 1, 0.35)
-    // Glow behind the app icons of the workspace indicator.
-    readonly property color iconShadow: "#050505"
 
     // Accents
     readonly property color accent: "#525252"

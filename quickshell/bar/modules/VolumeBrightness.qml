@@ -38,7 +38,7 @@ Pill {
     IconValue {
         icon: Icons.volume(root.level, root.muted)
         iconColor: root.muted ? Colors.textDim : Colors.accent
-        text: Math.round(root.level * 100) + "%"
+        text: (root.muted ? 0 : Math.round(root.level * 100)) + "%"
         onScrolled: delta => root.setLevel(root.level + (delta > 0 ? 0.05 : -0.05))
     }
 
@@ -54,15 +54,30 @@ Pill {
         anchorItem: root
 
         MenuHeader { text: root.sink?.description ?? "No output" }
-        SliderBar {
+        RowLayout {
             Layout.fillWidth: true
-            value: root.level
-            onMoved: value => root.setLevel(value)
-        }
-        MenuButton {
-            icon: Icons.volumeOff
-            text: root.muted ? "Unmute" : "Mute"
-            onClicked: root.toggleMute()
+            spacing: Theme.popupSpacing
+
+            Text {
+                text: Icons.volumeOff
+                // Opposite of the slider track: bright when the track is dimmed (muted), dim when it's active.
+                color: root.muted ? Colors.textDim : Colors.accent
+                font.family: Theme.fontFamily
+                font.pixelSize: Theme.iconSize
+
+                MouseArea {
+                    anchors.fill: parent
+                    anchors.margins: -4
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: root.toggleMute()
+                }
+            }
+            SliderBar {
+                Layout.fillWidth: true
+                value: root.level
+                disabled: root.muted
+                onMoved: value => root.setLevel(value)
+            }
         }
 
         MenuHeader {

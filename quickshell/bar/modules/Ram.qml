@@ -6,8 +6,15 @@ import qs.bar.services
 Pill {
     id: root
 
+    readonly property bool warnLevel: SystemStats.ramUsage > 60
+    readonly property bool critLevel: SystemStats.ramUsage > 80
+    readonly property color levelColor: critLevel ? Colors.critical : warnLevel ? Colors.warn : Colors.accent
+
     icon: Icons.memory
-    iconColor: SystemStats.ramUsage > 90 ? Colors.critical : Colors.accent
+    iconColor: warnLevel ? levelColor : Colors.accent
+    textColor: warnLevel ? levelColor : Colors.text
+    statusActive: warnLevel
+    statusColor: levelColor
     text: Math.round(SystemStats.ramUsage) + "%"
     contentSpacing: Theme.iconTextSpacing
     reserveText: "100%"

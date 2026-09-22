@@ -16,6 +16,8 @@ Singleton {
     readonly property int pillRadius: pillHeight / 2
     readonly property int pillPadding: 12
     readonly property int pillSpacing: 6
+    // Extra room for icons flagged via Icons.needsEdgePadding when they sit against a pill's rounded edge.
+    readonly property int iconEdgePadding: 6
     // Gap between the icon and the value in the status pills (volume, CPU, ...).
     readonly property int iconTextSpacing: 3
     readonly property int sectionSpacing: 8

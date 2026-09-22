@@ -13,13 +13,17 @@ Pill {
     readonly property bool charging: device.state === UPowerDeviceState.Charging
     // On mains power. A full battery reports "fully charged" rather than "charging", but should still show the bolt.
     readonly property bool pluggedIn: !UPower.onBattery
-    readonly property bool low: !pluggedIn && percent <= 20
+    readonly property bool low: !pluggedIn && percent < 20
+    readonly property bool warnLevel: !pluggedIn && percent < 30
+    readonly property color levelColor: low ? Colors.critical : warnLevel ? Colors.warn : Colors.accent
     readonly property real seconds: charging ? device.timeToFull : device.timeToEmpty
 
     visible: device.ready && device.isPresent
     icon: Icons.battery(percent, pluggedIn)
-    iconColor: low ? Colors.critical : percent <= 30 && !pluggedIn ? Colors.warn : Colors.accent
-    textColor: low ? Colors.critical : Colors.text
+    iconColor: warnLevel ? levelColor : Colors.accent
+    textColor: warnLevel ? levelColor : Colors.text
+    statusActive: warnLevel
+    statusColor: levelColor
     text: Math.round(percent) + "%"
     contentSpacing: Theme.iconTextSpacing
     reserveText: "100%"

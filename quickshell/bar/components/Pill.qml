@@ -20,6 +20,9 @@ Rectangle {
     property bool active: false
     // Only pills that react to the wheel swallow it; the others let it reach a parent (e.g. a scrolling bar section).
     property bool wheelEnabled: false
+    // When set, tints the pill's background and border with statusColor (e.g. a CPU/RAM/battery warning level).
+    property bool statusActive: false
+    property color statusColor: Colors.accent
     readonly property bool hovered: hover.hovered
 
     default property alias content: row.data
@@ -30,8 +33,10 @@ Rectangle {
     implicitHeight: Theme.pillHeight
     implicitWidth: row.implicitWidth + padding * 2
     radius: Theme.pillRadius
-    color: hovered || active ? Colors.pillHover : Colors.pill
-    border.color: Colors.pillBorder
+    color: statusActive
+        ? Qt.tint(hovered || active ? Colors.pillHover : Colors.pill, Qt.rgba(statusColor.r, statusColor.g, statusColor.b, 0.35))
+        : (hovered || active ? Colors.pillHover : Colors.pill)
+    border.color: statusActive ? statusColor : Colors.pillBorder
     border.width: 1
 
     Behavior on color { ColorAnimation { duration: Theme.animFast } }

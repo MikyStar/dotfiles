@@ -6,10 +6,13 @@ Item {
     id: root
 
     property real value: 0
+    // Dims the whole slider and blocks dragging (e.g. the volume slider while muted).
+    property bool disabled: false
     signal moved(real value)
 
     implicitWidth: 220
     implicitHeight: 22
+    opacity: disabled ? 0.5 : 1
 
     Rectangle {
         id: track
@@ -38,8 +41,11 @@ Item {
 
     MouseArea {
         anchors.fill: parent
-        cursorShape: Qt.PointingHandCursor
+        // Kept enabled (rather than disabled) so the forbidden cursor actually shows up while hovering.
+        cursorShape: root.disabled ? Qt.ForbiddenCursor : Qt.PointingHandCursor
         function update(mouse) {
+            if (root.disabled)
+                return;
             root.moved(Math.max(0, Math.min(1, mouse.x / width)));
         }
         onPressed: mouse => update(mouse)
