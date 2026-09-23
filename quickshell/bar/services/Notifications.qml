@@ -10,13 +10,11 @@ Singleton {
 
     readonly property var model: server.trackedNotifications
     readonly property int count: server.trackedNotifications.values.length
-    // Notifications that arrived since the list was last opened (and are still there).
+    // Notifications received and not yet dismissed. Opening/closing the popup does NOT clear this --
+    // only dismissing notifications (one by one, or via clear()) does, which is why it's just the
+    // arrival count clamped to what's still around rather than a separately tracked "seen" flag.
     readonly property int unseen: Math.min(_unseen, count)
     property int _unseen: 0
-
-    function markSeen() {
-        _unseen = 0;
-    }
 
     function clear() {
         for (const n of [...server.trackedNotifications.values])
