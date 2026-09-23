@@ -6,5 +6,5 @@
 hl.layer_rule({
   match = { namespace = "^qs-.*$" },
   blur = true,
-  ignore_alpha = 0.3,
+  ignore_alpha = 0.8,
 })
