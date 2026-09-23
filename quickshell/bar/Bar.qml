@@ -25,26 +25,47 @@ Variants {
             anchors.fill: parent
             anchors.margins: Theme.barMargin
 
-            // The center zone stays on the screen's middle, unless the left zone is in the way or the right zone
-            // needs the room to show all its modules: then it moves left, down to `zoneGap` from the left zone.
-            // The right zone only gets the room left of the center (minus `zoneGap`); when its modules need more it scrolls.
-            readonly property real centerX: Math.max(
-                left.width + Theme.zoneGap,
-                Math.min((width - center.width) / 2, width - right.desiredWidth - Theme.zoneGap - center.width))
+            // The center zone sits equidistant between the left and right zones -- not simply on the screen's
+            // middle, since those two zones aren't generally the same width -- unless the left zone is in the
+            // way or the right zone needs the room to show all its modules: then it's clamped to whichever's
+            // short of room. The right zone only gets the room left of the center (minus `zoneGap`); when its
+            // modules need more they collapse into its overflow menu.
+            //
+            // This is deliberately computed from `left.fullWidth`/`center.fullWidth` rather than the live
+            // `left.width`/`center.width`: those two zones fold themselves down while the overflow menu is
+            // expanded (see below), and if that shrinkage fed back into this budget, RightSection.hasOverflow
+            // would flip false mid-expansion and immediately snap `expanded` back to false again.
+            readonly property real leftBoundary: left.fullWidth + Theme.zoneGap
+            readonly property real rightBoundary: width - right.desiredWidth - Theme.zoneGap
+            readonly property real centerX: Math.max(leftBoundary,
+                Math.min((leftBoundary + rightBoundary - center.fullWidth) / 2, rightBoundary - center.fullWidth))
 
             LeftSection {
                 id: left
+                compact: right.expanded
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
             }
             CenterSection {
                 id: center
-                x: content.centerX
+                // While expanded, folds down to just the clock and pins right after the app menu icon,
+                // as if it had joined the left zone -- not on top of it -- handing the right zone
+                // virtually the rest of the bar. Targets `left.compactWidth` (the left zone's known
+                // final folded width) rather than its live, still-animating `width`, so this section's
+                // own move animates in lockstep with the left zone's instead of chasing it and lagging.
+                x: right.expanded ? left.compactWidth + Theme.sectionSpacing : content.centerX
+                compact: right.expanded
                 anchors.verticalCenter: parent.verticalCenter
+
+                Behavior on x { NumberAnimation { duration: Theme.animSlow; easing.type: Easing.OutCubic } }
             }
             RightSection {
                 id: right
-                maxWidth: content.width - content.centerX - center.width - Theme.zoneGap
+                maxWidth: content.width - content.centerX - center.fullWidth - Theme.zoneGap
+                // How much room is actually free once expanded: this one *is* allowed to reflect the
+                // live, already-folded left/center zones, since it only sizes the scroll fallback and
+                // never feeds back into the fit calculation above.
+                expandedMaxWidth: content.width - center.width - Theme.zoneGap
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
             }

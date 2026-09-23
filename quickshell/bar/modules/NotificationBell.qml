@@ -8,10 +8,21 @@ import qs.bar.services
 Item {
     id: root
 
-    visible: Notifications.unseen > 0 || menu.open
+    // Folded away, animated, e.g. while the overflow menu is expanded and needs the room.
+    property bool compact: false
 
+    visible: Notifications.unseen > 0 || menu.open
+    clip: true
+    enabled: !compact
+    opacity: compact ? 0 : 1
+    // Stays the true natural size regardless of `compact`, so callers reserving room for it (e.g.
+    // CenterSection.fullWidth) get a stable answer; only the actual layout size collapses.
     implicitWidth: pill.implicitWidth
     implicitHeight: pill.implicitHeight
+    Layout.preferredWidth: compact ? 0 : implicitWidth
+
+    Behavior on Layout.preferredWidth { NumberAnimation { duration: Theme.animSlow; easing.type: Easing.OutCubic } }
+    Behavior on opacity { NumberAnimation { duration: Theme.animSlow } }
 
     Pill {
         id: pill

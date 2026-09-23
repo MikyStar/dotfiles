@@ -47,6 +47,7 @@ Singleton {
     readonly property string shutdown: "\uf011"
 
     // Misc
+    readonly property string overflowMenu: "\uf141"
     readonly property string dot: "\uf111"
     readonly property string dotEmpty: "\uf10c"
     readonly property string arrowDown: "\uf063"

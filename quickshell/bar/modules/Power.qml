@@ -8,6 +8,11 @@ Pill {
     id: root
 
     icon: Icons.power
+    // Whole pill goes red on hover or click, same as a battery running low -- a reminder of what
+    // this button leads to, matching the shutdown entry's own color in its menu below.
+    iconColor: (hovered || menu.open) ? Colors.critical : Colors.accent
+    statusActive: hovered || menu.open
+    statusColor: Colors.critical
     active: menu.open
     onClicked: menu.toggle()
 

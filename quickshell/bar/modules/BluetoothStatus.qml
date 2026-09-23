@@ -14,8 +14,14 @@ Pill {
     // Unpaired devices seen during discovery. Unnamed ones only have a MAC address, so they are skipped.
     readonly property var nearbyDevices: Bluetooth.devices.values.filter(d => !d.paired && d.name !== "" && d.name !== d.address)
 
+    // While active, the icon blinks once a second between its normal ("active") color and the dim
+    // ("inactive") one, so an on-but-idle adapter still reads as alive at a glance.
+    readonly property color activeColor: connectedDevices.length > 0 ? Colors.accent : Colors.text
+    readonly property color inactiveColor: Colors.textDim
+    property color blinkColor: activeColor
+
     icon: Icons.bluetooth
-    iconColor: !adapter?.enabled ? Colors.textDim : connectedDevices.length > 0 ? Colors.accent : Colors.text
+    iconColor: (adapter?.enabled ?? false) ? blinkColor : inactiveColor
     text: connectedDevices.length > 0 ? connectedDevices[0].name : ""
     maxTextWidth: 120
     active: menu.open
@@ -28,6 +34,14 @@ Pill {
             device.connect();
         else
             device.pair();
+    }
+
+    SequentialAnimation {
+        running: root.adapter?.enabled ?? false
+        loops: Animation.Infinite
+
+        ColorAnimation { target: root; property: "blinkColor"; from: root.activeColor; to: root.inactiveColor; duration: 500 }
+        ColorAnimation { target: root; property: "blinkColor"; from: root.inactiveColor; to: root.activeColor; duration: 500 }
     }
 
     PopupMenu {

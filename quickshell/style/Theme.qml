@@ -33,4 +33,6 @@ Singleton {
 
     // Animation
     readonly property int animFast: 120
+    // Overflow menu: modules collapsing into it / expanding back out.
+    readonly property int animSlow: 260
 }
