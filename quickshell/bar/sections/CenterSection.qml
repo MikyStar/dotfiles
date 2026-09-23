@@ -12,10 +12,10 @@ RowLayout {
     // Full width regardless of `compact`: callers reserve room using this instead of the live
     // `width`, so that reservation doesn't itself shrink the moment this section folds -- which,
     // for the overflow menu's own fit calculation, would only feed back into itself.
-    // `bellMod` only shows once there's something to show (see NotificationBell.visible), so unlike
-    // the always-shown clock, its width counts only while it's actually visible -- otherwise this
+    // `bellMod` only shows once there's something to show (see NotificationBell.hasContent), so unlike
+    // the always-shown clock, its width counts only while it actually has content -- otherwise this
     // wouldn't change when it appears/disappears, and the overflow menu would never recompute in response.
-    readonly property real fullWidth: clockMod.implicitWidth + (bellMod.visible ? Theme.sectionSpacing + bellMod.implicitWidth : 0)
+    readonly property real fullWidth: clockMod.implicitWidth + (bellMod.hasContent ? Theme.sectionSpacing + bellMod.implicitWidth : 0)
 
     spacing: Theme.sectionSpacing
 

@@ -18,6 +18,16 @@ Pill {
     // Whether the title and progress bar are shown. The title area has a fixed width (longer titles are elided).
     property bool expanded: true
     readonly property string title: player ? (player.trackArtist ? `${player.trackArtist} - ` : "") + player.trackTitle : ""
+    // The player's app id, same lookup `onClicked` uses to focus its window.
+    readonly property string appId: player ? (player.desktopEntry || player.identity || "") : ""
+    // Nerd Font glyph for the app currently playing (see Icons.app), falling back to the generic
+    // music note when there's no mapping for it -- or no player at all.
+    readonly property string playerIcon: {
+        if (appId === "")
+            return Icons.music;
+        const mapped = Icons.app(appId);
+        return mapped === Icons.appUnknown ? Icons.music : mapped;
+    }
 
     // Elapsed seconds. Players rarely push position updates, so between the values they do report
     // the position is extrapolated from the clock while playing.
@@ -58,8 +68,12 @@ Pill {
         }
     }
 
-    visible: player !== null
-    icon: Icons.music
+    // Whether there's a player to show at all. Exposed as a plain property rather than driving this
+    // item's own `visible`, so LeftSection can fold it away with the same animated width/opacity
+    // treatment it already uses for compacting -- an instant `visible` snap here would jump the rest
+    // of the bar (and the center zone chasing after it) with no transition to follow.
+    readonly property bool hasPlayer: player !== null
+    icon: playerIcon
     onPlayerChanged: {
         _cachedLength = 0;
         _cachedLengthTrack = -1;
@@ -70,8 +84,7 @@ Pill {
             player.stop();
             return;
         }
-        const app = player.desktopEntry || player.identity;
-        Hyprland.dispatch(`hl.dsp.focus({ window = "class:(?i)^${app}$" })`);
+        Hyprland.dispatch(`hl.dsp.focus({ window = "class:(?i)^${root.appId}$" })`);
     }
 
     Connections {

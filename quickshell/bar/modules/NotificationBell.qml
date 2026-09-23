@@ -11,15 +11,19 @@ Item {
 
     // Folded away, animated, e.g. while the overflow menu is expanded and needs the room.
     property bool compact: false
+    // Whether there's anything to show at all. Exposed as a plain property rather than this item's own
+    // `visible`, so it folds away with the same animated width/opacity treatment as `compact` -- an
+    // instant `visible` snap here would jump the rest of the bar with no transition to follow.
+    readonly property bool hasContent: Notifications.unseen > 0 || menu.open
+    readonly property bool collapsed: compact || !hasContent
 
-    visible: Notifications.unseen > 0 || menu.open
-    enabled: !compact
-    opacity: compact ? 0 : 1
-    // Stays the true natural size regardless of `compact`, so callers reserving room for it (e.g.
+    enabled: !collapsed
+    opacity: collapsed ? 0 : 1
+    // Stays the true natural size regardless of `collapsed`, so callers reserving room for it (e.g.
     // CenterSection.fullWidth) get a stable answer; only the actual layout size collapses.
     implicitWidth: pill.implicitWidth
     implicitHeight: pill.implicitHeight
-    Layout.preferredWidth: compact ? 0 : implicitWidth
+    Layout.preferredWidth: collapsed ? 0 : implicitWidth
 
     Behavior on Layout.preferredWidth { NumberAnimation { duration: Theme.animSlow; easing.type: Easing.OutCubic } }
     Behavior on opacity { NumberAnimation { duration: Theme.animSlow } }

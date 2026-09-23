@@ -46,6 +46,11 @@ Singleton {
     readonly property string reboot: "\uf021"
     readonly property string shutdown: "\uf011"
 
+    // power-profiles-daemon profiles
+    readonly property string profilePerformance: "\uf135"
+    readonly property string profileBalanced: "\uf24e"
+    readonly property string profilePowerSaver: "\uf06c"
+
     // Misc
     readonly property string overflowMenu: "\uf141"
     readonly property string dot: "\uf111"

@@ -22,20 +22,29 @@ RowLayout {
     // to size the scroll fallback below -- never the fit calculation -- so it's safe for this one to
     // reflect the caller's current, `expanded`-aware layout.
     property real expandedMaxWidth: Infinity
-    // Ideal width if every module were shown, used by Bar.qml to keep the center zone clear of it.
-    readonly property real desiredWidth: _items.reduce((sum, it) => sum + it.implicitWidth, 0)
-        + Theme.sectionSpacing * _items.length + pinnedBaseWidth
-
     readonly property var _items: [wifiMod, btMod, volMod, cpuMod, ramMod, tempMod]
     // Battery + power alone, regardless of whether the overflow icon is currently shown: used for the
     // fit budget below without the icon's own visibility feeding back into that same calculation.
     readonly property real pinnedBaseWidth: batteryMod.implicitWidth + powerMod.implicitWidth + Theme.sectionSpacing
     // Same, but including the overflow icon once it's actually shown -- what `pinned` really measures.
     readonly property real pinnedWidth: pinnedBaseWidth + (hasOverflow ? Theme.sectionSpacing + menuIcon.implicitWidth : 0)
-
     // How many leading modules currently fit; the rest collapse into the overflow menu.
     readonly property int visibleCount: _computeVisibleCount()
     readonly property bool hasOverflow: visibleCount < _items.length
+    // Width the section actually settles to once `visibleCount` is decided: the visible modules plus
+    // their fixed gaps (see `_computeVisibleCount` -- the strip always reserves gaps for all six
+    // modules, just some collapsed to zero width) plus `pinnedWidth`. What Bar.qml centers the center
+    // zone against. Computed directly from implicit widths rather than read back from the live `width`
+    // (which lags behind while modules fold/unfold, mid-`Behavior`), so Bar.qml gets an immediate,
+    // stable answer instead of chasing a moving target.
+    readonly property real settledWidth: {
+        const widths = _items.map(it => it.implicitWidth);
+        const fixedGaps = (widths.length - 1) * Theme.sectionSpacing;
+        let shown = 0;
+        for (let i = 0; i < visibleCount; i++)
+            shown += widths[i];
+        return shown + fixedGaps + Theme.sectionSpacing + pinnedWidth;
+    }
     // Expanded by clicking the overflow menu: every module shows regardless of fit, overlapping
     // whatever is in the way -- there's nowhere else in the bar to put them. If even that isn't
     // enough room, the strip becomes horizontally scrollable rather than pushing further out.

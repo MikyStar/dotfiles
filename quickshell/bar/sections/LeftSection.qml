@@ -10,11 +10,11 @@ RowLayout {
     // overflow menu is expanded and needs the room.
     property bool compact: false
     // Full width regardless of `compact` -- see CenterSection.fullWidth for why this matters. `mediaMod`
-    // only exists while something is playing (see Media.visible), so unlike the always-shown app menu
-    // and workspaces, its width counts only while it's actually visible -- otherwise this wouldn't
+    // only exists while something is playing (see Media.hasPlayer), so unlike the always-shown app menu
+    // and workspaces, its width counts only while a player is actually present -- otherwise this wouldn't
     // change when the player appears/disappears, and the overflow menu would never recompute in response.
     readonly property real fullWidth: appMenuMod.implicitWidth + Theme.sectionSpacing + workspacesMod.implicitWidth
-        + (mediaMod.visible ? Theme.sectionSpacing + mediaMod.implicitWidth : 0)
+        + (mediaMod.hasPlayer ? Theme.sectionSpacing + mediaMod.implicitWidth : 0)
     // Width once folded down to just the app menu icon. Unlike the live `width` (which is itself
     // mid-animation while folding/unfolding), this is known immediately, so a caller animating
     // something to sit right after this section -- the clock, while the overflow menu is expanded --
@@ -35,10 +35,14 @@ RowLayout {
     }
     Media {
         id: mediaMod
+        // Folds away both while compacting and whenever there's no player to show -- animated the same
+        // way, so a player appearing/disappearing reflows the rest of the bar (and the center zone
+        // chasing after it) smoothly instead of snapping instantly.
+        readonly property bool collapsed: root.compact || !hasPlayer
         clip: true
-        enabled: !root.compact
-        opacity: root.compact ? 0 : 1
-        Layout.preferredWidth: root.compact ? 0 : implicitWidth
+        enabled: !collapsed
+        opacity: collapsed ? 0 : 1
+        Layout.preferredWidth: collapsed ? 0 : implicitWidth
         Behavior on Layout.preferredWidth { NumberAnimation { duration: Theme.animSlow; easing.type: Easing.OutCubic } }
         Behavior on opacity { NumberAnimation { duration: Theme.animSlow } }
     }

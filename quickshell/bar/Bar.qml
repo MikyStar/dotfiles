@@ -27,16 +27,26 @@ Variants {
 
             // The center zone sits equidistant between the left and right zones -- not simply on the screen's
             // middle, since those two zones aren't generally the same width -- unless the left zone is in the
-            // way or the right zone needs the room to show all its modules: then it's clamped to whichever's
-            // short of room. The right zone only gets the room left of the center (minus `zoneGap`); when its
+            // way or the right zone needs the room for its modules: then it's clamped to whichever's short of
+            // room. The right zone only gets the room left of the center (minus `zoneGap`); when its other
             // modules need more they collapse into its overflow menu.
             //
-            // This is deliberately computed from `left.fullWidth`/`center.fullWidth` rather than the live
-            // `left.width`/`center.width`: those two zones fold themselves down while the overflow menu is
-            // expanded (see below), and if that shrinkage fed back into this budget, RightSection.hasOverflow
-            // would flip false mid-expansion and immediately snap `expanded` back to false again.
+            // Getting both "right zone shows as much as fits" and "center zone sits equidistant" right takes
+            // two passes, in this order (see RightSection.settledWidth too):
+            //  1. The right zone's fit budget (`maxWidth` below) is sized as if the center zone were pinned at
+            //     its leftmost legal position (`defaultCenterRight`) -- i.e. before it's actually been
+            //     centered. This is deliberately computed from `left.fullWidth`/`center.fullWidth` rather than
+            //     the not-yet-final `centerX`: feeding the live `centerX` in here would make the right zone's
+            //     fit decision depend on its own output (through `rightBoundary`/`centerX` below), which is
+            //     exactly the binding loop that used to make RightSection.hasOverflow flip erratically.
+            //  2. Once that fit decision has settled (`right.settledWidth`, computed directly from implicit
+            //     widths rather than the live, possibly mid-animation `width`), the center zone is centered
+            //     for real between `leftBoundary` and the resulting `rightBoundary`. Because `rightBoundary` is
+            //     derived *from* that already-decided width, `centerX` can never be clamped past it: the two
+            //     zones can end up closer than the generous first pass assumed, but never overlapping.
             readonly property real leftBoundary: left.fullWidth + Theme.zoneGap
-            readonly property real rightBoundary: width - right.desiredWidth - Theme.zoneGap
+            readonly property real defaultCenterRight: leftBoundary + center.fullWidth
+            readonly property real rightBoundary: width - right.settledWidth - Theme.zoneGap
             readonly property real centerX: Math.max(leftBoundary,
                 Math.min((leftBoundary + rightBoundary - center.fullWidth) / 2, rightBoundary - center.fullWidth))
 
@@ -61,7 +71,7 @@ Variants {
             }
             RightSection {
                 id: right
-                maxWidth: content.width - content.centerX - center.fullWidth - Theme.zoneGap
+                maxWidth: content.width - content.defaultCenterRight - Theme.zoneGap
                 // How much room is actually free once expanded: this one *is* allowed to reflect the
                 // live, already-folded left/center zones, since it only sizes the scroll fallback and
                 // never feeds back into the fit calculation above.
