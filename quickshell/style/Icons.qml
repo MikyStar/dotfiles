@@ -8,7 +8,9 @@ Singleton {
     readonly property string calendar: "\uf073"
     readonly property string bell: "\uf0f3"
     readonly property string wifi: "\uf1eb"
-    readonly property string bluetooth: "\uf293"
+    readonly property string bluetoothOff: "\udb80\udcb2"
+    readonly property string bluetoothOn: "\uf294"
+    readonly property string bluetoothPaired: "\udb80\udcb1"
     readonly property string cpu: "\uf2db"
     readonly property string memory: "\uefc5"
     readonly property string thermometer: "\uf2c9"
@@ -62,6 +64,12 @@ Singleton {
     readonly property string close: "\uf00d"
     readonly property string trash: "\uf1f8"
     readonly property string headphones: "\uf025"
+
+    function bluetooth(enabled: bool, paired: bool): string {
+        if (!enabled)
+            return bluetoothOff;
+        return paired ? bluetoothPaired : bluetoothOn;
+    }
 
     function volume(level: real, muted: bool): string {
         if (muted || level <= 0)

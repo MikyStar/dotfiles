@@ -14,14 +14,16 @@ Pill {
     // Unpaired devices seen during discovery. Unnamed ones only have a MAC address, so they are skipped.
     readonly property var nearbyDevices: Bluetooth.devices.values.filter(d => !d.paired && d.name !== "" && d.name !== d.address)
 
-    // While active, the icon blinks once a second between its normal ("active") color and the dim
-    // ("inactive") one, so an on-but-idle adapter still reads as alive at a glance.
-    readonly property color activeColor: connectedDevices.length > 0 ? Colors.accent : Colors.text
-    readonly property color inactiveColor: Colors.textDim
-    property color blinkColor: activeColor
+    readonly property bool connected: connectedDevices.length > 0
+    // Named to avoid shadowing Item's own `enabled` (used elsewhere to collapse/expand this pill).
+    readonly property bool btEnabled: adapter?.enabled ?? false
+    // While on but not yet connected to anything, the icon blinks once a second between grey and
+    // white so an on-but-idle adapter still reads as alive at a glance. Once connected it settles
+    // on a solid white; off is a solid grey.
+    property color blinkColor: Colors.textDim
 
-    icon: Icons.bluetooth
-    iconColor: (adapter?.enabled ?? false) ? blinkColor : inactiveColor
+    icon: Icons.bluetooth(btEnabled, connected)
+    iconColor: !btEnabled ? Colors.textDim : connected ? Colors.white : blinkColor
     text: connectedDevices.length > 0 ? connectedDevices[0].name : ""
     maxTextWidth: 120
     active: menu.open
@@ -37,22 +39,25 @@ Pill {
     }
 
     SequentialAnimation {
-        running: root.adapter?.enabled ?? false
+        running: root.btEnabled && !root.connected
         loops: Animation.Infinite
 
-        ColorAnimation { target: root; property: "blinkColor"; from: root.activeColor; to: root.inactiveColor; duration: 500 }
-        ColorAnimation { target: root; property: "blinkColor"; from: root.inactiveColor; to: root.activeColor; duration: 500 }
+        ColorAnimation { target: root; property: "blinkColor"; from: Colors.textDim; to: Colors.white; duration: 500 }
+        ColorAnimation { target: root; property: "blinkColor"; from: Colors.white; to: Colors.textDim; duration: 500 }
     }
 
     PopupMenu {
         id: menu
         anchorItem: root
 
-        // Scan only while the menu is open.
+        // Scan only while the menu is open. Gated on `state` rather than `enabled`: `enabled` flips
+        // true optimistically as soon as power-on is requested, but BlueZ silently ignores
+        // StartDiscovery while the adapter is still in the "Enabling" transition, which left the
+        // nearby-devices list empty until the menu was closed and reopened.
         Binding {
             target: root.adapter
             property: "discovering"
-            value: menu.open && (root.adapter?.enabled ?? false)
+            value: menu.open && (root.adapter?.state === BluetoothAdapterState.Enabled)
             when: root.adapter !== null
             restoreMode: Binding.RestoreNone
         }
@@ -62,8 +67,8 @@ Pill {
             Layout.minimumWidth: 280
             MenuHeader { text: "Bluetooth" }
             Text {
-                text: root.adapter?.enabled ? "On" : "Off"
-                color: root.adapter?.enabled ? Colors.good : Colors.textDim
+                text: root.btEnabled ? "On" : "Off"
+                color: root.btEnabled ? Colors.good : Colors.textDim
                 font.family: Theme.fontFamily
                 font.pixelSize: Theme.fontSize
                 MouseArea {
@@ -76,7 +81,7 @@ Pill {
         }
 
         Text {
-            visible: !root.adapter?.enabled
+            visible: !root.btEnabled
             text: root.adapter ? "Bluetooth is turned off" : "No Bluetooth adapter"
             color: Colors.textDim
             font.family: Theme.fontFamily
@@ -85,7 +90,7 @@ Pill {
 
         ColumnLayout {
             Layout.fillWidth: true
-            visible: root.adapter?.enabled ?? false
+            visible: root.btEnabled
             spacing: 6
 
             ScrollList {
@@ -109,14 +114,6 @@ Pill {
                     color: Colors.textDim
                     font.family: Theme.fontFamily
                     font.pixelSize: Theme.fontSize
-                }
-
-                Text {
-                    visible: root.nearbyDevices.length > 0 || (root.adapter?.discovering ?? false)
-                    text: root.nearbyDevices.length > 0 ? "Nearby" : "Searching…"
-                    color: Colors.textDim
-                    font.family: Theme.fontFamily
-                    font.pixelSize: Theme.fontSize - 1
                 }
 
                 Repeater {

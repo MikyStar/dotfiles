@@ -16,6 +16,12 @@ Pill {
     active: menu.open
     onClicked: menu.toggle()
 
+    // Override Pill's default color Behavior: the red tint should snap instantly on
+    // hover/click, same as every other section's hover feedback, not fade in.
+    Behavior on color {
+        ColorAnimation { duration: 0 }
+    }
+
     PopupMenu {
         id: menu
         anchorItem: root

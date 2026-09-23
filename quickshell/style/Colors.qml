@@ -16,6 +16,7 @@ Singleton {
     // Text
     readonly property color text: "#b3b3b3"
     readonly property color textDim: "#7d7d7d"
+    readonly property color white: "#ffffff"
 
     readonly property color scrollbar: Qt.rgba(1, 1, 1, 0.35)
 
