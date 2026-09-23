@@ -22,10 +22,20 @@ Pill {
     // Elapsed seconds. Players rarely push position updates, so between the values they do report
     // the position is extrapolated from the clock while playing.
     property real elapsed: 0
-    readonly property real progress: player && player.length > 0 ? Math.min(1, elapsed / player.length) : 0
     property real _anchorPos: 0
     property real _anchorTime: 0
     property real _lastReported: -1
+
+    // The track's real duration, remembered once seen. Some sources (e.g. Firefox's media-session
+    // bridge for a web tab) only report a duration for part of the track's life; once
+    // lengthSupported drops, player.length silently falls back to mirroring the live position
+    // instead of going back to "unknown". Caching the last real reading, keyed by track, means the
+    // total keeps showing correctly instead of disappearing or duplicating the elapsed time.
+    property real _cachedLength: 0
+    property int _cachedLengthTrack: -1
+    readonly property real length: player && player.uniqueId === _cachedLengthTrack ? _cachedLength : 0
+    readonly property bool hasLength: length > 0
+    readonly property real progress: hasLength ? Math.min(1, elapsed / length) : 0
 
     function sync() {
         if (!player) {
@@ -41,11 +51,20 @@ Pill {
             _anchorTime = now;
         }
         elapsed = player.isPlaying ? _anchorPos + (now - _anchorTime) / 1000 : reported;
+
+        if (player.lengthSupported && player.length > 0) {
+            _cachedLength = player.length;
+            _cachedLengthTrack = player.uniqueId;
+        }
     }
 
     visible: player !== null
     icon: Icons.music
-    onPlayerChanged: sync()
+    onPlayerChanged: {
+        _cachedLength = 0;
+        _cachedLengthTrack = -1;
+        sync();
+    }
     onClicked: mouse => {
         if (mouse.button === Qt.RightButton) {
             player.stop();
@@ -82,9 +101,14 @@ Pill {
             elide: Text.ElideNone
         }
         InfoRow {
-            visible: root.player?.length > 0
+            // Show the row whenever we have a trustworthy elapsed time at all; the total is
+            // appended only once a real duration has actually been seen for this track (see
+            // root.length).
+            visible: root.player?.positionSupported ?? false
             label: root.player?.identity ?? ""
-            value: `${Format.clock(root.elapsed)} / ${Format.clock(root.player?.length ?? 0)}`
+            value: root.hasLength
+                ? `${Format.clock(root.elapsed)} / ${Format.clock(root.length)}`
+                : Format.clock(root.elapsed)
         }
     }
 
@@ -152,9 +176,14 @@ Pill {
                 MouseArea {
                     anchors.fill: parent
                     anchors.margins: -4
-                    enabled: parent.modelData.enabled
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: parent.modelData.action()
+                    // Stay enabled even when the action itself is unavailable: a disabled
+                    // MouseArea is click-through in QtQuick, so clicks would otherwise fall to
+                    // the pill's own MouseArea underneath and focus the app instead of no-op'ing.
+                    cursorShape: parent.modelData.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
+                    onClicked: {
+                        if (parent.modelData.enabled)
+                            parent.modelData.action();
+                    }
                 }
             }
         }
