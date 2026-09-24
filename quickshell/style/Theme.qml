@@ -42,4 +42,9 @@ Singleton {
     readonly property int widgetSpacing: 24
     readonly property int widgetRadius: popupRadius
     readonly property int widgetPadding: popupPadding
+
+    // Finder overlay
+    readonly property int finderWidth: 640
+    readonly property int finderMaxResultRows: 8
+    readonly property int finderResultRowHeight: 44
 }

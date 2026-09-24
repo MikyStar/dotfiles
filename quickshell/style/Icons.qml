@@ -68,6 +68,7 @@ Singleton {
     readonly property string terminal: "\uf120"
     readonly property string folder: "\uf07b"
     readonly property string externalLink: "\uf08e"
+    readonly property string search: "\uf002"
 
     function bluetooth(enabled: bool, paired: bool): string {
         if (!enabled)

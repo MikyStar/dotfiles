@@ -19,6 +19,8 @@ Singleton {
     readonly property color white: "#ffffff"
 
     readonly property color scrollbar: Qt.rgba(1, 1, 1, 0.35)
+    // Dimmed backdrop behind full-screen overlays (e.g. the finder).
+    readonly property color backdrop: Qt.rgba(0, 0, 0, 0.35)
 
     // Accents
     readonly property color accent: "#525252"
