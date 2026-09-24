@@ -76,7 +76,12 @@ Card {
                 Layout.fillWidth: true
                 implicitHeight: content.implicitHeight
 
-                readonly property bool hovered: rowArea.containsMouse
+                // Union of the row area and the icon areas -- the icon MouseAreas sit on top of (occlude)
+                // rowArea so they get clicks first, but that also means rowArea stops receiving hover the
+                // moment the pointer crosses onto/between them, which flipped `hovered` false and hid the
+                // icons out from under the pointer (a flicker loop, since hiding them un-occludes rowArea,
+                // flipping it back true, reshowing them, ...). Combining all three keeps it stable.
+                readonly property bool hovered: rowArea.containsMouse || termArea.containsMouse || folderArea.containsMouse
 
                 // Below the row so interactive children (terminal/folder icons) receive clicks first.
                 MouseArea {

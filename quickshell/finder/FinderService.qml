@@ -107,7 +107,10 @@ Singleton {
     Timer {
         id: filterDebounce
         interval: 35
-        onTriggered: root._runFilter()
+        onTriggered: {
+            root._runFilter();
+            root._startCalc();
+        }
     }
 
     // -- Applications: built straight from DesktopEntries, no scan needed. --
@@ -164,12 +167,14 @@ Singleton {
         root.pathsIndexing = true;
         const excludeArgs = root.pathExcludes.map(e => `-E '${e}'`).join(" ");
         const raw = root.cacheDir + "/path.raw";
-        // Files and folders are scanned separately so each raw line can be tagged with an f/d prefix
-        // (fd's own output doesn't distinguish them, e.g. via a trailing "/") -- that tag is what tells
-        // _applyResults/_pathIcon whether to show a folder icon or a file-type one.
+        // Files and folders are scanned separately so each raw line can be tagged with an f/d prefix,
+        // used by _applyResults/_pathIcon to tell folders from files. `fd --type d` terminates every
+        // match with a trailing "/" (unlike --type f) -- stripped here, otherwise the awk step below
+        // would split the path into an extra trailing empty field and every folder's label (and hence
+        // its fuzzy-match text) would come out blank.
         pathsScanProc.command = ["sh", "-c", `mkdir -p "${root.cacheDir}"
             { fd --type f --max-depth ${root.pathScanDepth} ${excludeArgs} . "$HOME" 2>/dev/null | sed 's/^/f\\t/'
-              fd --type d --max-depth ${root.pathScanDepth} ${excludeArgs} . "$HOME" 2>/dev/null | sed 's/^/d\\t/'
+              fd --type d --max-depth ${root.pathScanDepth} ${excludeArgs} . "$HOME" 2>/dev/null | sed 's:/$::' | sed 's/^/d\\t/'
             } | head -20000 > "${raw}"
             awk -F'\\t' '{ n = split($2, parts, "/"); printf "path\\t%d\\t%s\\n", NR - 1, parts[n] }' "${raw}" > "${root.pathsFile}"
             cat "${raw}"`];
@@ -280,110 +285,150 @@ Singleton {
         return Icons.fileGeneric;
     }
 
-    // -- Calculator: a synthetic first result when the query itself looks like an arithmetic
-    // expression, e.g. "8*2+3" -> "= 19". Independent of fzf/the active tab -- always prepended
-    // when it applies, alongside whatever apps/paths/scripts also matched the same text.
+    // -- Calculator: a synthetic first result when the query itself looks like a math expression,
+    // e.g. "8*2+3" -> "= 19". Independent of fzf/the active tab -- prepended whenever it applies,
+    // alongside whatever apps/paths/scripts also matched the same text. Evaluated by piping to
+    // python3 (with the `math` module) rather than a handwritten parser, so parenthesized priority,
+    // exponents (**, or "^" as a friendlier alias) and math functions (sqrt, sin, log, ...) all come
+    // for free from Python's own grammar instead of having to be reimplemented here.
 
-    // True only when `q` is plausibly a full expression (not e.g. a bare number, or a leading "-").
-    // Requires an operator that isn't just a leading sign, so path/app searches with digits in them
-    // ("file.txt", "vlc-3") don't get treated as math (letters alone already fail the charset check).
+    // A short allow-list of `math` module names -- just enough that _looksLikeMath doesn't reject a
+    // call to one of them as "not an expression" for containing letters. It's a cheap prefilter to
+    // avoid spawning python3 on every non-math keystroke, not a security boundary: that's calcProc's
+    // sandboxed eval() below, which is safe regardless of what string reaches it.
+    readonly property var _mathFunctions: [
+        "sqrt", "cbrt", "pow", "exp", "log2", "log10", "log", "sin", "cos", "tan",
+        "asin", "acos", "atan2", "atan", "floor", "ceil", "trunc", "abs", "round",
+        "factorial", "hypot", "degrees", "radians", "gcd", "pi", "tau", "e",
+    ]
+
+    // True only when `q` is plausibly a full expression: known function/constant names are blanked
+    // out first (so "sqrt(16)" or "pi*2" reduce to pure arithmetic syntax), then what's left must be
+    // only digits/operators/parens/commas, contain a digit, and have an operator that isn't just a
+    // leading sign (so a bare number or path/app text with digits in it, e.g. "vlc-3", isn't treated
+    // as math -- plain letters elsewhere already fail the charset check on their own).
     function _looksLikeMath(q: string): bool {
-        const s = q.replace(/\s+/g, "");
-        if (s.length === 0 || !/^[0-9+\-*/%().]+$/.test(s) || !/[0-9]/.test(s))
+        let s = q.replace(/\s+/g, "");
+        if (s.length === 0)
             return false;
-        return s.includes("(") || /[0-9)][+\-*/%]/.test(s);
+        for (const name of root._mathFunctions)
+            s = s.split(name).join("0");
+        if (!/^[0-9+\-*/^%().,]+$/.test(s) || !/[0-9]/.test(s))
+            return false;
+        return s.includes("(") || /[0-9)][+\-*/^%]/.test(s);
     }
 
-    // Tiny recursive-descent evaluator for +, -, *, /, %, parentheses and unary +/- over decimals --
-    // deliberately not `eval`/`Function`, so a stray expression can't run arbitrary JS. Returns null
-    // on any syntax error, division by zero, or non-finite result (rather than throwing/NaN) so the
-    // caller can just skip showing a result.
-    function _evalMath(expr: string): var {
-        const s = expr.replace(/\s+/g, "");
-        let i = 0;
-        const peek = () => s[i];
+    // sys.argv[1] (note: NOT argv[0] -- with `python3 -c`, argv[0] is always "-c" itself, unlike
+    // `sh -c script arg0`, so no placeholder arg is passed in the command array below) is the
+    // expression. Deliberately not a bare `eval(expr, {"__builtins__": {}}, allowed)`: stripping
+    // __builtins__ still leaves ordinary attribute access reachable (e.g.
+    // "().__class__.__bases__[0].__subclasses__()" walks to every loaded class, __builtins__ or not),
+    // so this instead walks the parsed AST itself and only ever evaluates number literals, +-*/%**//,
+    // unary +/-, and calls/names from `allowed` -- anything else (attribute access, subscripting,
+    // comprehensions, string literals, ...) hits the catch-all `raise` and aborts. Float results are
+    // rounded to tame binary-float noise (0.1+0.2) and demoted to int when whole, so e.g. "10/2"
+    // prints "5" rather than "5.0".
+    readonly property string _calcScript: `
+import sys, ast, math, operator as op
+ops = {
+    ast.Add: op.add, ast.Sub: op.sub, ast.Mult: op.mul, ast.Div: op.truediv,
+    ast.Mod: op.mod, ast.Pow: op.pow, ast.FloorDiv: op.floordiv,
+    ast.USub: op.neg, ast.UAdd: op.pos,
+}
+allowed = {k: v for k, v in vars(math).items() if not k.startswith("_")}
+allowed.update({"abs": abs, "round": round, "pow": pow})
+def ev(node):
+    if isinstance(node, ast.Expression):
+        return ev(node.body)
+    if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)):
+        return node.value
+    if isinstance(node, ast.BinOp) and type(node.op) in ops:
+        return ops[type(node.op)](ev(node.left), ev(node.right))
+    if isinstance(node, ast.UnaryOp) and type(node.op) in ops:
+        return ops[type(node.op)](ev(node.operand))
+    if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id in allowed and not node.keywords:
+        return allowed[node.func.id](*[ev(a) for a in node.args])
+    if isinstance(node, ast.Name) and node.id in allowed:
+        return allowed[node.id]
+    raise ValueError("disallowed expression")
+try:
+    result = ev(ast.parse(sys.argv[1], mode="eval"))
+    if isinstance(result, float):
+        result = round(result, 10)
+        if result == int(result):
+            result = int(result)
+    print(result)
+except Exception:
+    sys.exit(1)
+`
 
-        function parseNumber() {
-            const start = i;
-            while (i < s.length && ((s[i] >= "0" && s[i] <= "9") || s[i] === "."))
-                i++;
-            if (i === start)
-                throw new Error("expected number");
-            const n = Number(s.slice(start, i));
-            if (Number.isNaN(n))
-                throw new Error("bad number");
-            return n;
+    // Debounced alongside _runFilter (see filterDebounce above), but resolved independently and
+    // asynchronously. Mirrors filterProc/_filtering/_filterPending below: a Process whose `command`/
+    // `running` is set again while it's still running just silently ignores that (it only re-checks
+    // them once the current run exits), so a re-trigger while calcProc is busy is queued via
+    // _calcPending and retried from onExited instead, re-reading the live query at that point rather
+    // than whatever it was when the retry was queued.
+    function _startCalc() {
+        if (root._calcRunning) {
+            root._calcPending = true;
+            return;
         }
-
-        function parseFactor() {
-            if (peek() === "+") { i++; return parseFactor(); }
-            if (peek() === "-") { i++; return -parseFactor(); }
-            if (peek() === "(") {
-                i++;
-                const v = parseExpr();
-                if (peek() !== ")")
-                    throw new Error("expected )");
-                i++;
-                return v;
+        if (!root._looksLikeMath(root.query)) {
+            if (root._calcResult !== null) {
+                root._calcResult = null;
+                root._calcGen++;
+                root._composeResults();
             }
-            return parseNumber();
+            return;
         }
+        root._calcRunning = true;
+        root._calcGen++;
+        calcProc.gen = root._calcGen;
+        // A leading "^" is a common calculator convention for exponentiation; Python's own operator
+        // for that is "**" (bare "^" means bitwise XOR, silently wrong for this use). The sublabel
+        // below keeps showing what was actually typed.
+        const expr = root.query.trim().replace(/\^/g, "**");
+        calcProc.command = ["python3", "-c", root._calcScript, expr];
+        calcProc.running = true;
+    }
 
-        function parseTerm() {
-            let v = parseFactor();
-            while (peek() === "*" || peek() === "/" || peek() === "%") {
-                const op = s[i++];
-                const rhs = parseFactor();
-                if (op === "*")
-                    v *= rhs;
-                else {
-                    if (rhs === 0)
-                        throw new Error("division by zero");
-                    v = op === "/" ? v / rhs : v % rhs;
-                }
+    Process {
+        id: calcProc
+        property int gen: 0
+        stdout: StdioCollector { id: calcOut }
+        onExited: code => {
+            root._calcRunning = false;
+            if (calcProc.gen === root._calcGen) {
+                const value = calcOut.text.trim();
+                root._calcResult = (code === 0 && value !== "")
+                    ? { kind: "calc", label: "= " + value, sublabel: root.query.trim(), icon: Icons.calculator, value: value }
+                    : null;
+                root._composeResults();
+            } // else: a newer query already superseded this one -- its own result stands.
+            if (root._calcPending) {
+                root._calcPending = false;
+                root._startCalc();
             }
-            return v;
-        }
-
-        function parseExpr() {
-            let v = parseTerm();
-            while (peek() === "+" || peek() === "-")
-                v = s[i++] === "+" ? v + parseTerm() : v - parseTerm();
-            return v;
-        }
-
-        try {
-            const result = parseExpr();
-            if (i !== s.length || !Number.isFinite(result))
-                return null;
-            return result;
-        } catch (e) {
-            return null;
         }
     }
 
-    // Trims float noise (e.g. 0.1+0.2) down to 6 decimal places without padding whole numbers.
-    function _formatCalc(n: real): string {
-        if (Number.isInteger(n))
-            return String(n);
-        return n.toFixed(6).replace(/0+$/, "").replace(/\.$/, "");
-    }
+    property var _calcResult: null
+    property int _calcGen: 0
+    property bool _calcRunning: false
+    property bool _calcPending: false
+    property var _matchedResults: [] // last fzf-derived [{ kind: app/path/script, ... }, ...], calc excluded
 
-    function _calcEntry(): var {
-        if (!root._looksLikeMath(root.query))
-            return null;
-        const value = root._evalMath(root.query);
-        if (value === null)
-            return null;
-        return { kind: "calc", label: "= " + root._formatCalc(value), sublabel: root.query.trim(), icon: Icons.calculator, value: root._formatCalc(value) };
+    // Combines the last fzf match list with whatever the calculator has (async and independently of
+    // fzf) settled on, calc first. Called after either one changes.
+    function _composeResults() {
+        const out = root._calcResult ? [root._calcResult, ...root._matchedResults] : root._matchedResults;
+        root.results = out;
+        root.selectedIndex = out.length > 0 ? 0 : -1;
     }
 
     function _applyResults(text: string) {
         const lines = text.split("\n").filter(l => l.length > 0);
         const out = [];
-        const calc = root._calcEntry();
-        if (calc)
-            out.push(calc);
         for (const line of lines) {
             const parts = line.split("\t");
             if (parts.length < 3)
@@ -406,7 +451,7 @@ Singleton {
             if (out.length >= 200)
                 break;
         }
-        root.results = out;
-        root.selectedIndex = out.length > 0 ? 0 : -1;
+        root._matchedResults = out;
+        root._composeResults();
     }
 }

@@ -12,7 +12,10 @@ Rectangle {
     required property int index
 
     readonly property bool selected: FinderService.selectedIndex === index
-    readonly property bool hovered: area.containsMouse
+    // Union of the row area and the icon areas -- see the same comment in widgets/disk/Disk.qml. The
+    // icon MouseAreas below occlude `area` for hover once the pointer is over/between them, which used
+    // to flip `hovered` false and hide the icons out from under the pointer in a flicker loop.
+    readonly property bool hovered: area.containsMouse || termArea.containsMouse || folderArea.containsMouse
     readonly property bool isPath: modelData.kind === "path"
 
     Layout.fillWidth: true
@@ -84,8 +87,18 @@ Rectangle {
         }
 
         RowLayout {
-            visible: root.isPath && root.hovered
+            // `visible` stays keyed only to isPath (not to hover) so this row's width is constant
+            // regardless of hover -- toggling `visible` on hover made the label column beside it
+            // resize under the cursor the instant it appeared, which could nudge the pointer off the
+            // row (or onto/off an icon) and immediately flip `hovered` back, glitching in a loop.
+            // Opacity (plus `enabled`, so the hidden icons aren't clickable/hoverable) reveals the
+            // same reserved space instead, so nothing ever reflows while hovering.
+            visible: root.isPath
+            opacity: root.hovered ? 1 : 0
+            enabled: root.hovered
             spacing: 8
+
+            Behavior on opacity { NumberAnimation { duration: Theme.animFast } }
 
             Text {
                 text: Icons.terminal
