@@ -6,4 +6,5 @@
   { "path": "/home/user/Downloads", "expandChildren": false },
   { "path": "/home/user/Pictures", "expandChildren": false },
   { "path": "/home/user/Repos", "expandChildren": true }
+  { "path": "/home/user/Scripts", "expandChildren": false }
 ]

@@ -1,3 +1,7 @@
 singleton WeatherService WeatherService.qml
 singleton WeatherIcons WeatherIcons.qml
 Weather Weather.qml
+WeatherCurrent WeatherCurrent.qml
+WeatherHourly WeatherHourly.qml
+WeatherDaily WeatherDaily.qml
+WeatherReading WeatherReading.qml
