@@ -1,0 +1,24 @@
+{
+  "disk": {
+    "paths": [
+      { "path": "/", "expandChildren": false },
+      { "path": "/home/user", "expandChildren": false },
+      { "path": "/home/user/.cache", "expandChildren": false },
+      { "path": "/home/user/Documents", "expandChildren": false },
+      { "path": "/home/user/Downloads", "expandChildren": false },
+      { "path": "/home/user/Pictures", "expandChildren": false },
+      { "path": "/home/user/Repos", "expandChildren": true },
+      { "path": "/home/user/Scripts", "expandChildren": false }
+    ]
+  },
+  "endpoints": [
+    "https://github.com",
+    "https://nixos.org"
+  ],
+  "weather": {
+    "city": "Nice, France",
+    "latitude": 43.7102,
+    "longitude": 7.2620,
+    "timezone": "Europe/Paris"
+  }
+}

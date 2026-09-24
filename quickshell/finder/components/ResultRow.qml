@@ -3,7 +3,7 @@ import QtQuick.Layouts
 import qs.style
 import qs.finder
 
-// One result row: icon, label + dim sublabel, and (files only) hover-revealed terminal/folder actions
+// One result row: icon, label + dim sublabel, and (paths only) hover-revealed terminal/folder actions
 // at the far right, matching the disk widget's tree rows.
 Rectangle {
     id: root
@@ -13,7 +13,7 @@ Rectangle {
 
     readonly property bool selected: FinderService.selectedIndex === index
     readonly property bool hovered: area.containsMouse
-    readonly property bool isFile: modelData.kind === "file"
+    readonly property bool isPath: modelData.kind === "path"
 
     Layout.fillWidth: true
     implicitHeight: Theme.finderResultRowHeight
@@ -47,8 +47,10 @@ Rectangle {
             Layout.preferredHeight: Theme.iconSize + 6
         }
         Text {
+            // Apps carry an iconSource (image); paths carry a Nerd Font glyph in `icon` (folder icon, or
+            // a file-type one -- see FinderService._pathIcon); scripts have neither, so fall to terminal.
             visible: root.modelData.iconSource === undefined || root.modelData.iconSource === ""
-            text: root.isFile ? Icons.folder : Icons.terminal
+            text: root.modelData.icon ?? Icons.terminal
             color: Colors.accent
             font.family: Theme.fontFamily
             font.pixelSize: Theme.iconSize + 4
@@ -69,7 +71,9 @@ Rectangle {
                 elide: Text.ElideRight
             }
             Text {
-                visible: root.modelData.sublabel !== "" && !(root.isFile && root.hovered)
+                // Always shown when there's a sublabel to show -- hiding it on hover (as before) collapsed
+                // this row's content and shifted the layout around under the pointer.
+                visible: root.modelData.sublabel !== ""
                 Layout.fillWidth: true
                 text: root.modelData.sublabel
                 color: Colors.textDim
@@ -80,7 +84,7 @@ Rectangle {
         }
 
         RowLayout {
-            visible: root.isFile && root.hovered
+            visible: root.isPath && root.hovered
             spacing: 8
 
             Text {
@@ -95,7 +99,7 @@ Rectangle {
                     anchors.margins: -4
                     hoverEnabled: true
                     cursorShape: Qt.PointingHandCursor
-                    onClicked: FinderService.openTerminalFor(root.modelData.path)
+                    onClicked: FinderService.openTerminalFor(root.modelData.path, root.modelData.isDir === true)
                 }
             }
             Text {

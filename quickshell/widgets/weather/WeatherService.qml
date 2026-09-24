@@ -3,15 +3,18 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-// Current + hourly + 7-day forecast for Nice, France, from Open-Meteo (free, no API key needed).
+// Current + hourly + 7-day forecast, from Open-Meteo (free, no API key needed), for the location
+// configured in config.json's "weather" section.
 // https://open-meteo.com/en/docs
 Singleton {
     id: root
 
-    readonly property string city: "Nice, France"
-    readonly property real latitude: 43.7102
-    readonly property real longitude: 7.2620
-    readonly property string timezone: "Europe/Paris"
+    readonly property string configPath: Quickshell.shellPath("config.json")
+
+    property string city: ""
+    property real latitude: 0
+    property real longitude: 0
+    property string timezone: "UTC"
 
     property bool loading: false
     property string error: ""
@@ -31,11 +34,34 @@ Singleton {
             return;
         loading = true;
         error = "";
+        configFile.reload();
+    }
+
+    FileView {
+        id: configFile
+        path: root.configPath
+        onLoaded: {
+            try {
+                const w = JSON.parse(text()).weather ?? {};
+                root.city = w.city ?? "";
+                root.latitude = w.latitude ?? 0;
+                root.longitude = w.longitude ?? 0;
+                root.timezone = w.timezone ?? "UTC";
+            } catch (e) {
+                root.error = "Bad config";
+                root.loading = false;
+                return;
+            }
+            root._fetch();
+        }
+    }
+
+    function _fetch() {
         const url = "https://api.open-meteo.com/v1/forecast"
-            + `?latitude=${latitude}&longitude=${longitude}`
+            + `?latitude=${root.latitude}&longitude=${root.longitude}`
             + "&current=temperature_2m,weather_code,is_day"
             + "&hourly=temperature_2m,precipitation_probability,weather_code,is_day"
-            + `&timezone=${encodeURIComponent(timezone)}&forecast_days=8`;
+            + `&timezone=${encodeURIComponent(root.timezone)}&forecast_days=8`;
         fetchProc.command = ["curl", "-s", "--max-time", "10", url];
         fetchProc.running = true;
     }

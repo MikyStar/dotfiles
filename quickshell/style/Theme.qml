@@ -47,4 +47,8 @@ Singleton {
     readonly property int finderWidth: 640
     readonly property int finderMaxResultRows: 8
     readonly property int finderResultRowHeight: 44
+    // Fraction of screen height down from the top. Deliberately independent of the box's own (variable,
+    // result-count-dependent) height, so the search field never shifts on screen as the list grows/shrinks --
+    // see Finder.qml's `box.y`.
+    readonly property real finderTopFraction: 0.26
 }

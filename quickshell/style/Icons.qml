@@ -70,6 +70,86 @@ Singleton {
     readonly property string externalLink: "\uf08e"
     readonly property string search: "\uf002"
 
+    // Finder result icons: generic/default file plus a few type-specific ones, keyed off extension by
+    // FinderService._pathIcon. All Font Awesome 4 glyphs (stable across Nerd Font patches).
+    readonly property string fileGeneric: "\uf016"
+    readonly property string filePdf: "\uf1c1"
+    readonly property string fileWord: "\uf1c2"
+    readonly property string fileExcel: "\uf1c3"
+    readonly property string filePowerpoint: "\uf1c4"
+    readonly property string fileImage: "\uf1c5"
+    readonly property string fileArchive: "\uf1c6"
+    readonly property string fileAudio: "\uf1c7"
+    readonly property string fileVideo: "\uf1c8"
+    readonly property string calculator: "\uf1ec"
+
+    // Per-extension language glyphs for text/code files in the finder (FinderService._pathIcon), so
+    // e.g. a .py file shows the Python logo rather than the generic fileGeneric glyph above. Seti-UI/
+    // Devicon/custom Nerd Font glyphs, chosen (and verified against nerd-fonts' glyphnames.json) over
+    // Material Design equivalents so each stays a single BMP code point, no surrogate pairs needed.
+    readonly property string langPython: "\ue606"
+    readonly property string langJavascript: "\ue60c"
+    readonly property string langTypescript: "\ue628"
+    readonly property string langShell: "\ue691"
+    readonly property string langLua: "\ue620"
+    readonly property string langC: "\ue649"
+    readonly property string langCpp: "\ue646"
+    readonly property string langRust: "\ue68b"
+    readonly property string langGo: "\ue627"
+    readonly property string langJava: "\ue66d"
+    readonly property string langKotlin: "\ue634"
+    readonly property string langSwift: "\ue699"
+    readonly property string langRuby: "\ue739"
+    readonly property string langPhp: "\ue73d"
+    readonly property string langJson: "\ue60b"
+    readonly property string langYaml: "\ue6a8"
+    readonly property string langToml: "\ue6b2"
+    readonly property string langConfig: "\ue615"
+    readonly property string langHtml: "\ue60e"
+    readonly property string langCss: "\ue614"
+    readonly property string langSass: "\ue603"
+    readonly property string langMarkdown: "\ue609"
+    readonly property string langXml: "\ue619"
+    readonly property string langSql: "\ue64d"
+    readonly property string langQml: "\ue87d"
+
+    // Extension (lowercased, no dot) -> language glyph above.
+    readonly property var _langMap: ({
+        "js": langJavascript, "jsx": langJavascript, "mjs": langJavascript, "cjs": langJavascript,
+        "ts": langTypescript, "tsx": langTypescript,
+        "py": langPython,
+        "sh": langShell, "bash": langShell, "zsh": langShell,
+        "qml": langQml,
+        "lua": langLua,
+        "c": langC, "h": langC,
+        "cpp": langCpp, "hpp": langCpp, "cc": langCpp, "cxx": langCpp,
+        "rs": langRust,
+        "go": langGo,
+        "java": langJava,
+        "kt": langKotlin,
+        "swift": langSwift,
+        "rb": langRuby,
+        "php": langPhp,
+        "json": langJson,
+        "yaml": langYaml, "yml": langYaml,
+        "toml": langToml,
+        "ini": langConfig, "conf": langConfig,
+        "html": langHtml,
+        "css": langCss,
+        "scss": langSass,
+        "md": langMarkdown,
+        "xml": langXml,
+        "sql": langSql,
+    })
+
+    // Language-specific glyph for a lowercased file extension, or "" when none is recognized (the
+    // caller falls back to a generic file glyph -- see FinderService._pathIcon). Guarded with
+    // hasOwnProperty since a bare `_langMap[ext]` would return an inherited Object.prototype member
+    // (e.g. a function) for an ext like "constructor" instead of undefined.
+    function language(ext: string): string {
+        return Object.prototype.hasOwnProperty.call(_langMap, ext) ? _langMap[ext] : "";
+    }
+
     function bluetooth(enabled: bool, paired: bool): string {
         if (!enabled)
             return bluetoothOff;

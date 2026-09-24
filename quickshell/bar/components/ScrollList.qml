@@ -13,6 +13,14 @@ Flickable {
     property real rowHeight: 34
     property real spacing: 6
 
+    // Keyboard-driven scrolloff: when set (itemCount > 0), changing currentIndex keeps at least
+    // `lookAhead` rows visible beyond it in the direction of travel, scrolling just enough to restore
+    // that margin -- like vim's 'scrolloff'. Left at -1/0 (the defaults), nothing auto-scrolls and callers
+    // drive contentY purely by wheel/drag, as before.
+    property int currentIndex: -1
+    property int itemCount: 0
+    property int lookAhead: 0
+
     default property alias content: column.data
 
     // Scrollbar visibility: set on every scroll, cleared shortly after it stops.
@@ -26,6 +34,24 @@ Flickable {
         glide.to = _target;
         glide.start();
     }
+
+    function _ensureVisible() {
+        if (currentIndex < 0 || itemCount === 0)
+            return;
+        const step = rowHeight + spacing;
+        const lo = Math.max(0, currentIndex - lookAhead);
+        const hi = Math.min(itemCount - 1, currentIndex + lookAhead);
+        const topNeeded = lo * step;
+        const bottomNeeded = hi * step + rowHeight;
+        const base = glide.running ? _target : contentY;
+        if (topNeeded < base)
+            _scrollTo(topNeeded);
+        else if (bottomNeeded > base + height)
+            _scrollTo(bottomNeeded - height);
+    }
+
+    onCurrentIndexChanged: _ensureVisible()
+    onItemCountChanged: _ensureVisible()
 
     Layout.fillWidth: true
     implicitWidth: column.implicitWidth

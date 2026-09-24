@@ -3,12 +3,12 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-// Batched HTTP status check for the URLs in endpoints.json -- one `curl` invocation per refresh
-// cycle (see widget.md's Discussions) so a single dead/slow endpoint can't stall the others.
+// Batched HTTP status check for the URLs in config.json's "endpoints" -- one `curl` invocation per
+// refresh cycle (see widget.md's Discussions) so a single dead/slow endpoint can't stall the others.
 Singleton {
     id: root
 
-    readonly property string configPath: Quickshell.shellPath("widgets/endpoints/endpoints.json")
+    readonly property string configPath: Quickshell.shellPath("config.json")
 
     property bool loading: false
     property date lastUpdated: new Date(NaN)
@@ -33,7 +33,7 @@ Singleton {
         onLoaded: {
             let urls = [];
             try {
-                urls = JSON.parse(text());
+                urls = JSON.parse(text()).endpoints ?? [];
             } catch (e) {
                 urls = [];
             }

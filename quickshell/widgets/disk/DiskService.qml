@@ -4,11 +4,11 @@ import Quickshell
 import Quickshell.Io
 
 // Per-device used/total space, plus a `tree`-style breakdown of configured folder sizes under $HOME
-// (see disk-paths.json), topped up with the 5 next-heaviest folders directly under $HOME.
+// (see config.json's "disk.paths"), topped up with the 5 next-heaviest folders directly under $HOME.
 Singleton {
     id: root
 
-    readonly property string configPath: Quickshell.shellPath("widgets/disk/disk-paths.json")
+    readonly property string configPath: Quickshell.shellPath("config.json")
     readonly property string home: "/home/user"
     // Local filesystem types that aren't real storage and shouldn't show up as a "device".
     readonly property var excludedFsTypes: ["tmpfs", "devtmpfs", "overlay", "squashfs", "efivarfs", "proc",
@@ -45,7 +45,7 @@ Singleton {
         path: root.configPath
         onLoaded: {
             try {
-                root._config = JSON.parse(text());
+                root._config = JSON.parse(text()).disk?.paths ?? [];
             } catch (e) {
                 root._config = [];
             }
