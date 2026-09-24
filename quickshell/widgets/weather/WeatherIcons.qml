@@ -2,19 +2,26 @@ pragma Singleton
 import QtQuick
 import Quickshell
 
-// Maps Open-Meteo's WMO weather codes to Nerd Font (Font Awesome) glyphs.
-// https://open-meteo.com/en/docs -> "WMO Weather interpretation codes"
+// Maps Open-Meteo's WMO weather codes to a transparent SVG icon under icons/, rendered via Image
+// rather than a Nerd Font glyph. Several of the glyph codepoints this used to rely on (cloud-sun,
+// cloud-moon, rain, fog) simply aren't present in the installed JetBrainsMono Nerd Font -- confirmed
+// with `fc-match ":charset=<codepoint>"` falling back to unrelated fonts -- so they always rendered
+// as missing-glyph boxes. SVGs sidestep font coverage entirely.
 Singleton {
-    readonly property string sun: ""
-    readonly property string moon: ""
-    readonly property string cloud: ""
-    readonly property string cloudSun: ""
-    readonly property string cloudMoon: ""
-    readonly property string rain: ""
-    readonly property string snow: ""
-    readonly property string fog: ""
-    readonly property string storm: ""
-    readonly property string drop: ""
+    id: root
+
+    readonly property string _dir: Quickshell.shellPath("widgets/weather/icons")
+
+    readonly property string sun: root._dir + "/sun.svg"
+    readonly property string moon: root._dir + "/moon.svg"
+    readonly property string cloud: root._dir + "/cloud.svg"
+    readonly property string cloudSun: root._dir + "/cloud-sun.svg"
+    readonly property string cloudMoon: root._dir + "/cloud-moon.svg"
+    readonly property string rain: root._dir + "/rain.svg"
+    readonly property string snow: root._dir + "/snow.svg"
+    readonly property string fog: root._dir + "/fog.svg"
+    readonly property string storm: root._dir + "/storm.svg"
+    readonly property string drop: root._dir + "/drop.svg"
 
     // code: WMO weather code. isDay: whether to pick the day or night variant where one exists.
     function forCode(code: int, isDay: bool): string {

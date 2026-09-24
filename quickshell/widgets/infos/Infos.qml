@@ -11,6 +11,7 @@ Card {
 
     CardHeader {
         title: "Infos"
+        trailing: Format.timeAgo(InfosService.lastUpdated)
         showRefresh: true
         refreshing: InfosService.loading || InfosService.checkingUpdates
         onRefreshClicked: InfosService.refresh()
@@ -31,20 +32,5 @@ Card {
             : (InfosService.outdatedInputs === 0
                 ? "up to date"
                 : `${InfosService.outdatedInputs} of ${InfosService.totalInputs} inputs`)
-    }
-
-    Text {
-        Layout.fillWidth: true
-        // Text.Wrap alone isn't enough: a wrapping Text's default Layout.minimumWidth still equals
-        // its unwrapped implicit width, so a long input list would refuse to shrink below that and
-        // overflow past the card's right inset instead of wrapping -- Card's clip then cropped it
-        // flush with the edge, leaving no visible right padding while the left stayed padded.
-        Layout.minimumWidth: 0
-        visible: !InfosService.checkingUpdates && InfosService.outdatedInputs > 0
-        text: InfosService.outdatedNames.join(", ")
-        color: Colors.textDim
-        font.family: Theme.fontFamily
-        font.pixelSize: Theme.fontSize - 2
-        wrapMode: Text.Wrap
     }
 }

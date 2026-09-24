@@ -16,9 +16,9 @@ Rectangle {
     color: Colors.pill
     border.color: Colors.pillBorder
     border.width: 1
-    // Without this, a row that runs wide (e.g. the Infos card's update list) renders straight
-    // through the right inset instead of being held to it, while the left stays padded -- clip
-    // keeps both sides symmetric.
+    // Safety net for content that doesn't bound its own width (e.g. unelided text): without this
+    // it would render straight through the right inset instead of being held to it, while the left
+    // stays padded. Well-behaved rows shouldn't rely on it -- see InfoRow's fillWidth/elide value.
     clip: true
 
     ColumnLayout {

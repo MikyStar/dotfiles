@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.style
+import qs.bar.services
 import qs.widgets.components
 import qs.widgets.endpoints
 
@@ -9,6 +10,7 @@ Card {
 
     CardHeader {
         title: "Endpoints"
+        trailing: Format.timeAgo(EndpointsService.lastUpdated)
         showRefresh: true
         refreshing: EndpointsService.loading
         onRefreshClicked: EndpointsService.refresh()

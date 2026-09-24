@@ -8,18 +8,25 @@ import qs.widgets.weather
 Card {
     id: root
 
-    CardHeader { title: "Weather" }
+    CardHeader {
+        title: "Weather"
+        trailing: Format.timeAgo(WeatherService.lastUpdated)
+        showRefresh: true
+        refreshing: WeatherService.loading
+        onRefreshClicked: WeatherService.refresh()
+    }
 
     // Current conditions.
     RowLayout {
         Layout.fillWidth: true
         spacing: 10
 
-        Text {
-            text: WeatherIcons.forCode(WeatherService.currentCode, WeatherService.currentIsDay)
-            color: Colors.accent
-            font.family: Theme.fontFamily
-            font.pixelSize: Theme.iconSize + 12
+        Image {
+            source: WeatherIcons.forCode(WeatherService.currentCode, WeatherService.currentIsDay)
+            sourceSize: Qt.size(56, 56)
+            fillMode: Image.PreserveAspectFit
+            width: 28
+            height: 28
         }
         Text {
             text: Math.round(WeatherService.currentTemp) + "°"
@@ -54,12 +61,13 @@ Card {
             width: 34
             spacing: 2
 
-            Text {
+            Image {
                 Layout.alignment: Qt.AlignHCenter
-                text: WeatherIcons.forCode(hourCol.modelData.code, hourCol.modelData.isDay)
-                color: Colors.accent
-                font.family: Theme.fontFamily
-                font.pixelSize: Theme.iconSize - 2
+                source: WeatherIcons.forCode(hourCol.modelData.code, hourCol.modelData.isDay)
+                sourceSize: Qt.size(32, 32)
+                fillMode: Image.PreserveAspectFit
+                width: 16
+                height: 16
             }
             Text {
                 Layout.alignment: Qt.AlignHCenter
@@ -71,11 +79,12 @@ Card {
             RowLayout {
                 Layout.alignment: Qt.AlignHCenter
                 spacing: 1
-                Text {
-                    text: WeatherIcons.drop
-                    color: Colors.textDim
-                    font.family: Theme.fontFamily
-                    font.pixelSize: Theme.fontSize - 4
+                Image {
+                    source: WeatherIcons.drop
+                    sourceSize: Qt.size(20, 20)
+                    fillMode: Image.PreserveAspectFit
+                    width: 10
+                    height: 10
                 }
                 Text {
                     text: hourCol.modelData.precip + "%"
@@ -132,12 +141,14 @@ Card {
                     spacing: 1
                     visible: modelData.slot !== null
 
-                    Text {
+                    Image {
                         Layout.alignment: Qt.AlignHCenter
-                        text: modelData.slot ? WeatherIcons.forCode(modelData.slot.code, modelData.isDay) : ""
-                        color: Colors.accent
-                        font.family: Theme.fontFamily
-                        font.pixelSize: Theme.iconSize - 3
+                        visible: modelData.slot !== null
+                        source: modelData.slot ? WeatherIcons.forCode(modelData.slot.code, modelData.isDay) : ""
+                        sourceSize: Qt.size(30, 30)
+                        fillMode: Image.PreserveAspectFit
+                        width: 15
+                        height: 15
                     }
                     Text {
                         Layout.alignment: Qt.AlignHCenter
@@ -160,46 +171,12 @@ Card {
 
     Rectangle { Layout.fillWidth: true; implicitHeight: 1; color: Colors.pillBorder }
 
-    // City + last refreshed + manual refresh button.
-    RowLayout {
+    // City name.
+    Text {
         Layout.fillWidth: true
-        spacing: 6
-
-        Text {
-            text: WeatherService.city
-            color: Colors.textDim
-            font.family: Theme.fontFamily
-            font.pixelSize: Theme.fontSize - 1
-        }
-        Item { Layout.fillWidth: true }
-        Text {
-            text: Format.timeAgo(WeatherService.lastUpdated)
-            color: Colors.textDim
-            font.family: Theme.fontFamily
-            font.pixelSize: Theme.fontSize - 1
-        }
-        Text {
-            text: Icons.refresh
-            color: refreshArea.containsMouse ? Colors.text : Colors.accent
-            font.family: Theme.fontFamily
-            font.pixelSize: Theme.iconSize - 1
-
-            RotationAnimation on rotation {
-                running: WeatherService.loading
-                loops: Animation.Infinite
-                from: 0
-                to: 360
-                duration: 900
-            }
-
-            MouseArea {
-                id: refreshArea
-                anchors.fill: parent
-                anchors.margins: -4
-                hoverEnabled: true
-                cursorShape: Qt.PointingHandCursor
-                onClicked: WeatherService.refresh()
-            }
-        }
+        text: WeatherService.city
+        color: Colors.textDim
+        font.family: Theme.fontFamily
+        font.pixelSize: Theme.fontSize - 1
     }
 }
