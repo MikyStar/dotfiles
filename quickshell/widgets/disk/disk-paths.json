@@ -1,0 +1,9 @@
+[
+  { "path": "/", "expandChildren": false },
+  { "path": "/home/user", "expandChildren": false },
+  { "path": "/home/user/.cache", "expandChildren": false },
+  { "path": "/home/user/Documents", "expandChildren": false },
+  { "path": "/home/user/Downloads", "expandChildren": false },
+  { "path": "/home/user/Pictures", "expandChildren": false },
+  { "path": "/home/user/Repos", "expandChildren": true }
+]

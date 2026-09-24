@@ -1,0 +1,2 @@
+singleton EndpointsService EndpointsService.qml
+Endpoints Endpoints.qml

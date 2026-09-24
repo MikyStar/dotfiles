@@ -35,4 +35,11 @@ Singleton {
     readonly property int animFast: 120
     // Overflow menu: modules collapsing into it / expanding back out.
     readonly property int animSlow: 260
+
+    // Desktop widgets (right-hand side column: weather / endpoints; left-hand side: infos / disk)
+    readonly property int widgetWidth: 300
+    readonly property int widgetMargin: 16
+    readonly property int widgetSpacing: 24
+    readonly property int widgetRadius: popupRadius
+    readonly property int widgetPadding: popupPadding
 }

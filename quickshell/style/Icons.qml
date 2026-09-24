@@ -64,6 +64,10 @@ Singleton {
     readonly property string close: "\uf00d"
     readonly property string trash: "\uf1f8"
     readonly property string headphones: "\uf025"
+    readonly property string refresh: "\uf021"
+    readonly property string terminal: "\uf120"
+    readonly property string folder: "\uf07b"
+    readonly property string externalLink: "\uf08e"
 
     function bluetooth(enabled: bool, paired: bool): string {
         if (!enabled)
