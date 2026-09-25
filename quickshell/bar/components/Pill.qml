@@ -14,6 +14,7 @@ Rectangle {
     // Longer text is elided at this width (-1: no limit).
     property real maxTextWidth: -1
     property color iconColor: Colors.accent
+    property int iconSize: Theme.iconSize
     property color textColor: Colors.text
     property int padding: Theme.pillPadding
     property int contentSpacing: Theme.pillSpacing
@@ -68,7 +69,7 @@ Rectangle {
             text: root.icon
             color: root.iconColor
             font.family: Theme.fontFamily
-            font.pixelSize: Theme.iconSize
+            font.pixelSize: root.iconSize
         }
 
         Text {

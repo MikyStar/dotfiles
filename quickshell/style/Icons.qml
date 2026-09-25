@@ -17,6 +17,7 @@ Singleton {
     readonly property string power: "\uf011"
     readonly property string music: "\uf001"
     readonly property string nixos: "\uf313"
+    readonly property string coffee: "\uf0f4"
 
     // Volume
     readonly property string volumeHigh: "\uf028"
@@ -45,6 +46,7 @@ Singleton {
 
     // Power menu
     readonly property string lock: "\uf023"
+    readonly property string lockOpen: "\uf09c"
     readonly property string reboot: "\uf021"
     readonly property string shutdown: "\uf011"
 
