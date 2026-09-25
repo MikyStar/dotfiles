@@ -64,8 +64,8 @@ Singleton {
             open();
     }
 
-    function cycleFilter() {
-        filterIndex = (filterIndex + 1) % filterNames.length;
+    function cycleFilter(delta: int) {
+        filterIndex = (filterIndex + delta + filterNames.length) % filterNames.length;
     }
 
     function moveSelection(delta: int) {

@@ -124,10 +124,23 @@ PanelWindow {
                         background: null
                         padding: 0
 
-                        onTextChanged: FinderService.query = text
+                        // A leading ">" is a shortcut for jumping to the Scripts tab -- e.g. typing "> deploy"
+                        // switches the filter and leaves "deploy" behind, rather than being carried as a
+                        // literal character through the rest of the query.
+                        onTextChanged: {
+                            if (text.startsWith(">")) {
+                                const pos = Math.max(0, cursorPosition - 1);
+                                FinderService.filterIndex = 3;
+                                text = text.slice(1);
+                                cursorPosition = pos;
+                                return;
+                            }
+                            FinderService.query = text;
+                        }
 
                         Keys.onEscapePressed: FinderService.close()
-                        Keys.onTabPressed: FinderService.cycleFilter()
+                        Keys.onTabPressed: FinderService.cycleFilter(1)
+                        Keys.onBacktabPressed: FinderService.cycleFilter(-1)
                         Keys.onDownPressed: FinderService.moveSelection(1)
                         Keys.onUpPressed: FinderService.moveSelection(-1)
                         Keys.onReturnPressed: FinderService.activateSelected()
