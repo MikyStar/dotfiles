@@ -56,8 +56,12 @@ Card {
                 }
                 Item { Layout.fillWidth: true }
                 Text {
+                    readonly property real usage: modelData.total > 0 ? modelData.used / modelData.total : 0
+                    readonly property bool warnLevel: usage > 0.6
+                    readonly property bool critLevel: usage > 0.8
+
                     text: `${Format.bytes(modelData.used)} / ${Format.bytes(modelData.total)}`
-                    color: Colors.textDim
+                    color: critLevel ? Colors.critical : warnLevel ? Colors.warn : Colors.textDim
                     font.family: Theme.fontFamily
                     font.pixelSize: Theme.fontSize - 1
                 }

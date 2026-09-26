@@ -83,7 +83,7 @@ Singleton {
         if (r.kind === "app")
             r.appEntry.execute();
         else if (r.kind === "path")
-            Quickshell.execDetached(["xdg-open", r.path]);
+            root.openPath(r.path, r.isDir === true);
         else if (r.kind === "script")
             Quickshell.execDetached([r.path]);
         else if (r.kind === "calc")
@@ -99,6 +99,16 @@ Singleton {
 
     function openFilesFor(path: string) {
         Quickshell.execDetached(["nautilus", path]);
+    }
+
+    // Default action for a path result: a folder opens a terminal there, a file opens in neovim
+    // (inside a terminal, since it's a TUI editor) -- the explicit terminal/folder hover icons on the
+    // result row remain the way to reach openTerminalFor/openFilesFor directly regardless of kind.
+    function openPath(path: string, isDir: bool) {
+        if (isDir)
+            openTerminalFor(path, true);
+        else
+            Quickshell.execDetached(["kitty", "nvim", path]);
     }
 
     onQueryChanged: filterDebounce.restart()

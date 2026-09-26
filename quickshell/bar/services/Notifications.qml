@@ -1,6 +1,7 @@
 pragma Singleton
 import QtQuick
 import Quickshell
+import Quickshell.Hyprland
 import Quickshell.Services.Notifications
 
 // Notification daemon. Every incoming notification is kept until dismissed.
@@ -16,9 +17,27 @@ Singleton {
     readonly property int unseen: Math.min(_unseen, count)
     property int _unseen: 0
 
+    // Fired for every incoming notification, in addition to it being tracked -- consumed by the
+    // top-right toast popup (NotificationPopup.qml) to show a banner for it.
+    signal arrived(var n)
+
     function clear() {
         for (const n of [...server.trackedNotifications.values])
             n.dismiss();
+    }
+
+    // Focuses the window of the application a notification came from -- the same app-id-to-window-
+    // class lookup Media.qml uses for the now-playing pill.
+    function browseToApp(n) {
+        const appId = n.desktopEntry || n.appName || "";
+        if (appId !== "")
+            Hyprland.dispatch(`hl.dsp.focus({ window = "class:(?i)^${appId}$" })`);
+    }
+
+    // "Seen": acknowledged and cleared out of the notification list entirely -- unlike just dismissing
+    // the toast popup, which leaves the notification tracked (and still counted as unseen).
+    function markSeen(n) {
+        n.dismiss();
     }
 
     NotificationServer {
@@ -29,6 +48,7 @@ Singleton {
         onNotification: n => {
             n.tracked = true;
             root._unseen++;
+            root.arrived(n);
         }
     }
 }

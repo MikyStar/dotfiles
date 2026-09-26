@@ -43,6 +43,22 @@ Singleton {
     readonly property int widgetRadius: popupRadius
     readonly property int widgetPadding: popupPadding
 
+    // Notification toast popups (top-right corner banners for incoming notifications)
+    readonly property int toastWidth: 320
+    readonly property int toastGap: 10
+    readonly property int toastAutoDismissMs: 5000
+    readonly property int toastSlideDuration: 260
+    readonly property int toastFadeDuration: 180
+    // How far a toast travels during its slide in/out -- deliberately less than toastWidth: the popup
+    // window is exactly toastWidth wide (anchored flush to the screen's right edge), so an offset any
+    // larger than this would mostly land outside that surface and just get clipped instead of sliding.
+    readonly property int toastSlideDistance: 56
+
+    // Clipboard history menu (SUPER+SHIFT+V) -- positioned/sized like the finder overlay below, but
+    // its rows are a single line of preview text rather than an icon + label + sublabel.
+    readonly property int clipboardMaxRows: 10
+    readonly property int clipboardRowHeight: 36
+
     // Finder overlay
     readonly property int finderWidth: 640
     readonly property int finderMaxResultRows: 8

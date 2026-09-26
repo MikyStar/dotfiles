@@ -1,5 +1,6 @@
 return {
   mainMod = "SUPER",
   terminal = "kitty",
-  launcher = "rofi -show drun",
+  launcher = "quickshell ipc call finder toggle",
+  clipboardMenu = "quickshell ipc call clipboard toggle",
 }

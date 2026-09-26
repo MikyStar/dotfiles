@@ -2,6 +2,7 @@ local C = require("constants")
 
 hl.bind(C.mainMod .. " + Return", hl.dsp.exec_cmd(C.terminal))
 hl.bind(C.mainMod .. " + Space", hl.dsp.exec_cmd(C.launcher))
+hl.bind(C.mainMod .. " + SHIFT + V", hl.dsp.exec_cmd(C.clipboardMenu))
 hl.bind(C.mainMod .. " + Q", hl.dsp.window.close())
 hl.bind(C.mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 

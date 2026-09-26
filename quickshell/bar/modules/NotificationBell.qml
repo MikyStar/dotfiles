@@ -83,11 +83,26 @@ Item {
                         model: Notifications.model
 
                         Rectangle {
+                            id: notifRow
                             required property var modelData
+                            readonly property bool hovered: rowArea.containsMouse
                             Layout.fillWidth: true
                             implicitHeight: card.implicitHeight + 20
                             radius: 10
-                            color: Colors.item
+                            color: hovered ? Colors.itemHover : Colors.item
+
+                            Behavior on color { ColorAnimation { duration: Theme.animFast } }
+
+                            // Below `card` so its own action/close MouseAreas (declared after, hence on
+                            // top) get first refusal -- clicking anywhere else on the row browses to the
+                            // app that sent it.
+                            MouseArea {
+                                id: rowArea
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: Notifications.browseToApp(notifRow.modelData)
+                            }
 
                             ColumnLayout {
                                 id: card
