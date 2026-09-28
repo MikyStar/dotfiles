@@ -17,7 +17,8 @@ Singleton {
     readonly property string scriptsFile: cacheDir + "/scripts.tsv"
     readonly property string pathsFile: cacheDir + "/paths.tsv"
 
-    readonly property var filterNames: ["All", "Applications", "Paths", "Scripts"]
+    readonly property var filterNames: ["Recent", "All", "Applications", "Paths", "Scripts"]
+    readonly property int recentLimit: 10
     // fd excludes for the $HOME path scan -- heavy or noisy directories that are rarely what you want
     // from a launcher. fd already skips hidden/gitignored paths by default, hence no ".git"/".cache" here.
     readonly property var pathExcludes: ["node_modules", "target", "dist", "build", ".venv", "venv"]
@@ -35,6 +36,10 @@ Singleton {
     property var _scripts: [] // [{ label, path }]
     property var _paths: []   // [{ label, path, isDir }]
     property double _pathsIndexedAt: 0
+    // Last-activated app/path/script results, most-recent-first -- same shape as a normal result entry
+    // so it can be displayed by ResultRow/composed into `results` without any special-casing there.
+    // Calc results are never pushed here (see activateSelected). Session-only: not persisted to disk.
+    property var _recent: []
 
     property bool _filtering: false
     property bool _filterPending: false
@@ -80,15 +85,37 @@ Singleton {
         if (selectedIndex < 0 || selectedIndex >= results.length)
             return;
         const r = results[selectedIndex];
-        if (r.kind === "app")
+        if (r.kind === "app") {
             r.appEntry.execute();
-        else if (r.kind === "path")
+            root._pushRecent(r);
+        } else if (r.kind === "path") {
             root.openPath(r.path, r.isDir === true);
-        else if (r.kind === "script")
+            root._pushRecent(r);
+        } else if (r.kind === "script") {
             Quickshell.execDetached([r.path]);
-        else if (r.kind === "calc")
+            root._pushRecent(r);
+        } else if (r.kind === "calc") {
+            // Calculations are deliberately never recorded into Recent.
             Quickshell.execDetached(["sh", "-c", "printf '%s' \"$1\" | wl-copy", "sh", r.value]);
+        }
         close();
+    }
+
+    // Identity used to dedupe Recent entries -- re-selecting an already-recent item should move it to
+    // the front rather than create a second row for it.
+    function _recentKey(r): string {
+        if (r.kind === "app")
+            return "app:" + (r.appEntry.id ?? r.label);
+        if (r.kind === "path")
+            return "path:" + r.path;
+        if (r.kind === "script")
+            return "script:" + r.path;
+        return "";
+    }
+
+    function _pushRecent(r) {
+        const key = root._recentKey(r);
+        root._recent = [r, ...root._recent.filter(e => root._recentKey(e) !== key)].slice(0, root.recentLimit);
     }
 
     // For a folder, opens a terminal in the folder itself rather than its parent.
@@ -111,7 +138,13 @@ Singleton {
             Quickshell.execDetached(["kitty", "nvim", path]);
     }
 
-    onQueryChanged: filterDebounce.restart()
+    // Recent has no query of its own -- the moment there's text to search, hop to "All" so the input
+    // isn't silently ignored while sitting on a tab that doesn't fuzzy-filter.
+    onQueryChanged: {
+        if (query.length > 0 && filterIndex === 0)
+            filterIndex = 1;
+        filterDebounce.restart();
+    }
     onFilterIndexChanged: filterDebounce.restart()
 
     Timer {
@@ -219,16 +252,23 @@ Singleton {
 
     function _sourceFiles(): var {
         switch (filterIndex) {
-        case 1: return [root.appsFile];
-        case 2: return [root.pathsFile];
-        case 3: return [root.scriptsFile];
-        default: return [root.appsFile, root.scriptsFile, root.pathsFile];
+        case 2: return [root.appsFile];
+        case 3: return [root.pathsFile];
+        case 4: return [root.scriptsFile];
+        default: return [root.appsFile, root.scriptsFile, root.pathsFile]; // "All" (1)
         }
     }
 
     function _runFilter() {
         if (!root.visible)
             return;
+        // Recent isn't fzf-filtered -- it's just the last-activated list, shown as-is (and only ever
+        // reachable with an empty query; see onQueryChanged above).
+        if (root.filterIndex === 0) {
+            root._matchedResults = root._recent;
+            root._composeResults();
+            return;
+        }
         if (root._filtering) {
             root._filterPending = true;
             return;

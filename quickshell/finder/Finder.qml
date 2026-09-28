@@ -130,7 +130,7 @@ PanelWindow {
                         onTextChanged: {
                             if (text.startsWith(">")) {
                                 const pos = Math.max(0, cursorPosition - 1);
-                                FinderService.filterIndex = 3;
+                                FinderService.filterIndex = 4;
                                 text = text.slice(1);
                                 cursorPosition = pos;
                                 return;
