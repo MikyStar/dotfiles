@@ -53,20 +53,28 @@ Singleton {
         }
     }
 
+    // Config-supplied paths are never interpolated into the script text itself -- only into positional-
+    // parameter *references* ($1, $2, ...), which are fixed tokens the JS side controls. The actual path
+    // strings travel as trailing argv (after the "sh" arg0), same pattern as FinderService's proc calls,
+    // so nothing in config.json's "disk.paths" can break out of the intended command regardless of what
+    // characters it contains.
     function _runScan() {
         const exclude = root.excludedFsTypes.map(t => `-x ${t}`).join(" ");
-        const paths = root._config.map(e => e.path);
+        const args = [];
         const lines = [];
         lines.push(`df ${exclude} --local --output=target,used,size -B1 2>/dev/null | tail -n +2 | while read -r t u s; do printf 'DEVICE\\t%s\\t%s\\t%s\\n' "$t" "$u" "$s"; done`);
         for (const entry of root._config) {
-            lines.push(`s=$(du -sb "${entry.path}" 2>/dev/null | cut -f1); printf 'PATH\\t%s\\t%s\\n' "${entry.path}" "\${s:-0}"`);
+            args.push(entry.path);
+            const ref = `$${args.length}`;
+            lines.push(`p=${ref}; s=$(du -sb "$p" 2>/dev/null | cut -f1); printf 'PATH\\t%s\\t%s\\n' "$p" "\${s:-0}"`);
             if (entry.expandChildren) {
-                lines.push(`find "${entry.path}" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort | while read -r c; do cs=$(du -sb "$c" 2>/dev/null | cut -f1); printf 'CHILD\\t%s\\t%s\\t%s\\n' "${entry.path}" "$c" "\${cs:-0}"; done`);
+                lines.push(`find "$p" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort | while read -r c; do cs=$(du -sb "$c" 2>/dev/null | cut -f1); printf 'CHILD\\t%s\\t%s\\t%s\\n' "$p" "$c" "\${cs:-0}"; done`);
             }
         }
         // The 5 heaviest other folders directly under $HOME, excluding already-configured top-level paths.
-        lines.push(`du -x -d 1 -B1 "${root.home}" 2>/dev/null | sort -rn | while read -r s p; do printf 'HOMEDIR\\t%s\\t%s\\n' "$p" "$s"; done`);
-        scanProc.command = ["sh", "-c", lines.join("\n")];
+        args.push(root.home);
+        lines.push(`du -x -d 1 -B1 "$${args.length}" 2>/dev/null | sort -rn | while read -r s p; do printf 'HOMEDIR\\t%s\\t%s\\n' "$p" "$s"; done`);
+        scanProc.command = ["sh", "-c", lines.join("\n"), "sh"].concat(args);
         scanProc.running = true;
     }
 

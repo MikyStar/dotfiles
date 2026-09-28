@@ -1,47 +1,15 @@
 import QtQuick
 import QtQuick.Layouts
-import Quickshell
 import qs.style
 import qs.bar.components
+import qs.finder
 
-// NixOS button: click for the list of applications installed system-wide.
+// NixOS button: click opens the finder (apps/paths/scripts search), same as its keyboard shortcut.
 Pill {
     id: root
 
-    readonly property var apps: DesktopEntries.applications.values
-        .filter(a => !a.noDisplay)
-        .sort((a, b) => a.name.localeCompare(b.name))
-
     icon: Icons.nixos
     iconColor: Colors.text
-    active: menu.open
-    onClicked: menu.toggle()
-
-    PopupMenu {
-        id: menu
-        anchorItem: root
-
-        MenuHeader {
-            Layout.minimumWidth: 280
-            text: "Applications"
-        }
-
-        ScrollList {
-            maxRows: 8
-
-            Repeater {
-                model: root.apps
-
-                MenuButton {
-                    required property var modelData
-                    iconSource: Quickshell.iconPath(modelData.icon, true)
-                    text: modelData.name
-                    onClicked: {
-                        menu.close();
-                        modelData.execute();
-                    }
-                }
-            }
-        }
-    }
+    active: FinderService.visible
+    onClicked: FinderService.toggle()
 }
