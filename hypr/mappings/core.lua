@@ -15,4 +15,9 @@ hl.bind("Print", hl.dsp.exec_cmd("hyprshot -m region"))
 
 hl.bind(C.mainMod .. "+ F", hl.dsp.window.fullscreen())
 
+-- Routed through loginctl (not hyprlock directly) so hypridle's lock_cmd
+-- guard (pidof hyprlock || hyprlock) is what actually spawns it, avoiding
+-- a duplicate hyprlock instance.
+hl.bind(C.mainMod .. " + L", hl.dsp.exec_cmd("loginctl lock-session"))
+
 
