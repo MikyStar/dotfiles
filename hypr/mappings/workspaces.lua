@@ -38,5 +38,3 @@ hl.bind(C.mainMod .. " + SHIFT + KP_0",      hl.dsp.window.move({ workspace = 10
 hl.bind(C.mainMod .. " + SHIFT + KP_Insert", hl.dsp.window.move({ workspace = 10 }))
 
 hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })
-
--- TODO ability to insert workspace ?

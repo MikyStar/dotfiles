@@ -14,3 +14,5 @@ hl.bind(C.mainMod .. " + M", hl.dsp.exec_cmd("uwsm stop"))
 hl.bind("Print", hl.dsp.exec_cmd("hyprshot -m region"))
 
 hl.bind(C.mainMod .. "+ F", hl.dsp.window.fullscreen())
+
+
