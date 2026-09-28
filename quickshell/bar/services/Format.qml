@@ -4,6 +4,19 @@ import Quickshell
 
 // Small formatting helpers shared by modules.
 Singleton {
+    id: root
+
+    // Bumped periodically so timeAgo() bindings re-evaluate as time passes,
+    // instead of only when the watched date itself changes.
+    property int tick: 0
+
+    Timer {
+        interval: 15000
+        running: true
+        repeat: true
+        onTriggered: root.tick++
+    }
+
     function speed(bytesPerSec: real): string {
         if (bytesPerSec < 1024)
             return Math.round(bytesPerSec) + "B";
@@ -40,6 +53,7 @@ Singleton {
 
     // Human-relative distance from `date` to now, e.g. "35 min ago", "3 days ago", "2 months ago".
     function timeAgo(date: date): string {
+        const _tick = tick; // read to establish a binding dependency so callers refresh periodically
         if (!date || isNaN(date.getTime()))
             return "never";
         const seconds = Math.max(0, (Date.now() - date.getTime()) / 1000);
