@@ -4,8 +4,10 @@ import Quickshell.Services.Pipewire
 import qs.style
 import qs.bar.components
 
-// Blinking mic icon shown only while the default input is actively being recorded from (not merely
-// unmuted) -- i.e. some app currently has a live link into it. Same fold-away treatment as
+// Mic icon shown while some app has a live link into the default input, whether or not it's
+// currently muted -- clicking toggles the mute, same as VolumeBrightness's sink mute button, so
+// muting from here doesn't strand the user without a way back. Blinks only while actually
+// recording (linked and unmuted); sits static once muted. Same fold-away treatment as
 // NotificationBell, so it collapses in `compact` mode like the rest of CenterSection.
 Item {
     id: root
@@ -13,9 +15,14 @@ Item {
     property bool compact: false
     readonly property var source: Pipewire.defaultAudioSource
     readonly property bool muted: source?.audio?.muted ?? false
-    readonly property bool recording: source !== null && !muted
-        && Pipewire.linkGroups.values.some(g => g.source === source && g.state === PwLinkState.Active)
-    readonly property bool hasContent: recording
+    readonly property var activeLinkGroups: source !== null
+        ? Pipewire.linkGroups.values.filter(g => g.source === source && g.state === PwLinkState.Active)
+        : []
+    readonly property bool recording: !muted && activeLinkGroups.length > 0
+    // De-duplicated human-readable names of whatever's linked to the mic, e.g. ["Firefox"].
+    readonly property var appNames: [...new Set(activeLinkGroups.map(g =>
+        g.target?.properties?.["application.name"] ?? g.target?.description ?? g.target?.name ?? "Unknown app"))]
+    readonly property bool hasContent: activeLinkGroups.length > 0
     readonly property bool collapsed: compact || !hasContent
 
     enabled: !collapsed
@@ -27,7 +34,14 @@ Item {
     Behavior on Layout.preferredWidth { NumberAnimation { duration: Theme.animSlow; easing.type: Easing.OutCubic } }
     Behavior on opacity { NumberAnimation { duration: Theme.animSlow } }
 
-    PwObjectTracker { objects: root.source ? [root.source] : [] }
+    // All link groups (and their targets) must be tracked, not just the active ones -- a group's
+    // `state` only starts updating once it's tracked, so filtering to `activeLinkGroups` first
+    // would mean a group could never be discovered as active in the first place.
+    PwObjectTracker {
+        objects: root.source
+            ? [root.source, ...Pipewire.linkGroups.values, ...Pipewire.linkGroups.values.map(g => g.target).filter(t => t)]
+            : []
+    }
 
     Item {
         anchors.fill: parent
@@ -35,17 +49,19 @@ Item {
 
         Pill {
             id: pill
-            property color blinkColor: Colors.critical
+            property color blinkColor: Colors.textDim
 
-            icon: Icons.microphone
-            iconColor: pill.blinkColor
+            icon: root.muted ? Icons.microphoneMuted : Icons.microphone
+            iconColor: root.muted ? Colors.textDim : pill.blinkColor
+
+            onClicked: if (root.source) root.source.audio.muted = !root.muted
 
             SequentialAnimation {
                 running: root.recording
                 loops: Animation.Infinite
 
-                ColorAnimation { target: pill; property: "blinkColor"; from: Colors.critical; to: Colors.textDim; duration: 500 }
-                ColorAnimation { target: pill; property: "blinkColor"; from: Colors.textDim; to: Colors.critical; duration: 500 }
+                ColorAnimation { target: pill; property: "blinkColor"; from: Colors.textDim; to: Colors.text; duration: 500 }
+                ColorAnimation { target: pill; property: "blinkColor"; from: Colors.text; to: Colors.textDim; duration: 500 }
             }
 
             PopupMenu {
@@ -56,7 +72,17 @@ Item {
                 MenuHeader { text: "Microphone" }
                 Text {
                     Layout.fillWidth: true
-                    text: (root.source?.description ?? "Microphone") + " is recording"
+                    text: (root.muted
+                        ? "Access blocked for: "
+                        : (root.source?.description ?? "Microphone") + " is recording: ") + root.appNames.join(", ")
+                    color: Colors.textDim
+                    font.family: Theme.fontFamily
+                    font.pixelSize: Theme.fontSize
+                    wrapMode: Text.Wrap
+                }
+                Text {
+                    Layout.fillWidth: true
+                    text: root.muted ? "Click to unmute" : "Click to mute and cut off access"
                     color: Colors.textDim
                     font.family: Theme.fontFamily
                     font.pixelSize: Theme.fontSize

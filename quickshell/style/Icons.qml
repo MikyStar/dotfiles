@@ -15,6 +15,7 @@ Singleton {
     readonly property string wifiStrength3: "\udb82\udd25"
     readonly property string wifiStrength4: "\udb82\udd28"
     readonly property string microphone: "\uf130"
+    readonly property string microphoneMuted: "\uf131"
     readonly property string bluetoothOff: "\udb80\udcb2"
     readonly property string bluetoothOn: "\uf294"
     readonly property string bluetoothPaired: "\udb80\udcb1"
