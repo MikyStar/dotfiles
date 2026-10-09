@@ -14,12 +14,14 @@ Singleton {
     property bool busy: false       // a connect attempt is running
     property string error: ""
     readonly property bool connected: ssid !== ""
+    property bool ethernetConnected: false
 
     property var _known: []
 
     function refresh(rescan: bool) {
         radioProc.running = true;
         knownProc.running = true;
+        ethernetProc.running = true;
         if (rescan) {
             rescanProc.running = true;
             listTimer.restart();
@@ -80,6 +82,17 @@ Singleton {
         stdout: StdioCollector {
             onStreamFinished: root._known = text.split("\n").map(root._fields)
                 .filter(f => f[1] === "802-11-wireless").map(f => f[0])
+        }
+    }
+
+    Process {
+        id: ethernetProc
+        command: ["nmcli", "-t", "-f", "type,state", "device", "status"]
+        stdout: StdioCollector {
+            onStreamFinished: root.ethernetConnected = text.split("\n").some(line => {
+                const [type, state] = root._fields(line);
+                return type === "ethernet" && state === "connected";
+            })
         }
     }
 

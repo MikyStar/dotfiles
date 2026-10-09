@@ -18,11 +18,15 @@ RowLayout {
     // recompute in response.
     readonly property real fullWidth: clockMod.implicitWidth
         + (bellMod.hasContent ? Theme.sectionSpacing + bellMod.implicitWidth : 0)
+        + (micMod.hasContent ? Theme.sectionSpacing + micMod.implicitWidth : 0)
+        + (mailMod.hasContent ? Theme.sectionSpacing + mailMod.implicitWidth : 0)
         + (sleepMod.hasContent ? Theme.sectionSpacing + sleepMod.implicitWidth : 0)
 
     spacing: Theme.sectionSpacing
 
     Clock { id: clockMod }
     NotificationBell { id: bellMod; compact: root.compact }
+    Microphone { id: micMod; compact: root.compact }
+    Mail { id: mailMod; compact: root.compact }
     SleepGuards { id: sleepMod; compact: root.compact }
 }

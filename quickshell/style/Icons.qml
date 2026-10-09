@@ -7,7 +7,14 @@ Singleton {
     // Bar modules
     readonly property string calendar: "\uf073"
     readonly property string bell: "\uf0f3"
+    readonly property string mail: "\uf0e0"
     readonly property string wifi: "\uf1eb"
+    readonly property string ethernet: "\udb80\ude00"
+    readonly property string wifiStrength1: "\udb82\udd1f"
+    readonly property string wifiStrength2: "\udb82\udd22"
+    readonly property string wifiStrength3: "\udb82\udd25"
+    readonly property string wifiStrength4: "\udb82\udd28"
+    readonly property string microphone: "\uf130"
     readonly property string bluetoothOff: "\udb80\udcb2"
     readonly property string bluetoothOn: "\uf294"
     readonly property string bluetoothPaired: "\udb80\udcb1"
@@ -164,6 +171,17 @@ Singleton {
         if (muted || level <= 0)
             return volumeOff;
         return level > 0.5 ? volumeHigh : volumeLow;
+    }
+
+    // Signal strength (0-100, as reported by nmcli) -> tiered bars glyph.
+    function wifiSignal(signal: int): string {
+        if (signal > 75)
+            return wifiStrength4;
+        if (signal > 50)
+            return wifiStrength3;
+        if (signal > 25)
+            return wifiStrength2;
+        return wifiStrength1;
     }
 
     function brightness(level: real): string {

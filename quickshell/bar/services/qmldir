@@ -1,6 +1,7 @@
 singleton Backlight Backlight.qml
 singleton Caffeinate Caffeinate.qml
 singleton Format Format.qml
+singleton MailService MailService.qml
 singleton Network Network.qml
 singleton NoLock NoLock.qml
 singleton Notifications Notifications.qml

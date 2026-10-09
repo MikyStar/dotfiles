@@ -15,8 +15,8 @@ Pill {
     // Secured network waiting for its password.
     property string pending: ""
 
-    icon: Icons.wifi
-    iconColor: Network.connected ? Colors.accent : Colors.textDim
+    icon: Network.ethernetConnected ? Icons.ethernet : (Network.connected ? Icons.wifiSignal(Network.signal) : Icons.wifi)
+    iconColor: Network.ethernetConnected || Network.connected ? Colors.accent : Colors.textDim
     text: `${Icons.arrowDown}${rx} ${Icons.arrowUp}${tx}`
     active: menu.open
     onClicked: menu.toggle()
@@ -38,7 +38,10 @@ Pill {
         open: root.hovered && !menu.open
         grabFocus: false
 
-        MenuHeader { text: Network.enabled ? (Network.connected ? Network.ssid : "Not connected") : "Wi-Fi off" }
+        MenuHeader {
+            text: Network.ethernetConnected ? "Ethernet"
+                : Network.enabled ? (Network.connected ? Network.ssid : "Not connected") : "Wi-Fi off"
+        }
         InfoRow { visible: Network.connected; label: "Signal"; value: Network.signal + "%" }
         InfoRow { label: "Download"; value: Format.speed(SystemStats.rxSpeed) + "/s" }
         InfoRow { label: "Upload"; value: Format.speed(SystemStats.txSpeed) + "/s" }
