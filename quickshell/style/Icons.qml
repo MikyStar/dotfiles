@@ -71,6 +71,8 @@ Singleton {
     readonly property string folder: "\uf07b"
     readonly property string externalLink: "\uf08e"
     readonly property string search: "\uf002"
+    readonly property string check: "\uf00c"
+    readonly property string download: "\uf019"
 
     // Finder result icons: generic/default file plus a few type-specific ones, keyed off extension by
     // FinderService._pathIcon. All Font Awesome 4 glyphs (stable across Nerd Font patches).

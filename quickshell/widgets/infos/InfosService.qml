@@ -21,11 +21,60 @@ Singleton {
     property var outdatedNames: []
     property bool checkingUpdates: false
 
+    // Git status of flakeDir itself (it's commonly tracked in git). gitOk is false when flakeDir
+    // isn't a repo at all, in which case the widget just hides the row rather than showing "0 dirty".
+    property bool gitOk: false
+    property bool gitChecking: false
+    property int gitDirtyCount: 0
+
     function refresh() {
         if (loading)
             return;
         loading = true;
         gensProc.running = true;
+        gitChecking = true;
+        gitProc.running = true;
+    }
+
+    Process {
+        id: gitProc
+        command: ["git", "-C", flakeDir, "status", "--porcelain"]
+        stdout: StdioCollector { id: gitOut }
+        onExited: code => {
+            root.gitChecking = false;
+            root.gitOk = code === 0;
+            if (code !== 0)
+                return;
+            const text = gitOut.text.trim();
+            root.gitDirtyCount = text === "" ? 0 : text.split("\n").length;
+        }
+    }
+
+    // Opens a terminal in flakeDir with the flake-lock update command for every outdated input
+    // pre-filled on the prompt line (scripts/prompt-run.sh) rather than run outright, so the user
+    // reviews/edits it before pressing enter. The command text travels as a plain positional argv
+    // entry -- never spliced into a script string, and with no "-c"/dash-led token for kitty's own
+    // arg parser to trip over -- so nothing in an input's name can break out of the intended command
+    // (same convention as DiskService's scan script). Runs under the user's actual login shell
+    // (whatever $SHELL is -- prompt-run.sh itself picks the right pre-fill mechanism for it), not a
+    // hardcoded bash, so the user lands in their normal shell when they're done.
+    function openUpdateTerminal() {
+        if (outdatedNames.length === 0)
+            return;
+        // Not outdatedNames.flatMap(...): this QML/JS engine doesn't implement Array.prototype.flatMap,
+        // and it fails silently (Quickshell's stdout/stderr aren't visible anywhere) -- the whole function
+        // was throwing right here and never reaching execDetached below.
+        const updateArgs = [];
+        for (const name of outdatedNames)
+            updateArgs.push("--update-input", name);
+        // sudo: updating the flake lock itself doesn't need it, but switching the system afterwards
+        // does, and the user wants it pre-applied here rather than typed in again at that point.
+        const cmd = ["sudo", "nix", "flake", "lock"].concat(updateArgs).join(" ");
+        const script = Quickshell.shellPath("scripts/prompt-run.sh");
+        const shell = Quickshell.env("SHELL") || "bash";
+        // --hold: if the script errors out immediately (e.g. bad path), the window stays open
+        // showing why instead of flashing and vanishing before it can be read.
+        Quickshell.execDetached(["kitty", "--hold", "--directory", flakeDir, shell, script, cmd]);
     }
 
     Process {
@@ -100,11 +149,18 @@ cat "$tmp/flake.lock"
         }
     }
 
+    // Checked every minute rather than waited out as a single 1h interval: QML timers run on
+    // a monotonic clock that doesn't advance during suspend, so a bare 1h repeat can go long
+    // stretches of wall-clock time without firing on a machine that's mostly asleep. Polling
+    // wall-clock elapsed time instead makes refreshes self-correct right after resume.
     Timer {
-        interval: 3600000 // 1h
+        interval: 60000 // 1m
         running: true
         repeat: true
         triggeredOnStart: true
-        onTriggered: root.refresh()
+        onTriggered: {
+            if (isNaN(root.lastUpdated.getTime()) || Date.now() - root.lastUpdated.getTime() >= 3600000)
+                root.refresh();
+        }
     }
 }
