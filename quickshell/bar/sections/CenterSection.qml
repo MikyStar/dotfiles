@@ -22,7 +22,11 @@ RowLayout {
         + (mailMod.hasContent ? Theme.sectionSpacing + mailMod.implicitWidth : 0)
         + (sleepMod.hasContent ? Theme.sectionSpacing + sleepMod.implicitWidth : 0)
 
-    spacing: Theme.sectionSpacing
+    // Zero here rather than Theme.sectionSpacing: bellMod/micMod/mailMod/sleepMod collapse their own
+    // width to 0 when empty but stay in the layout (for the animation -- see their `collapsed`), so a
+    // uniform RowLayout spacing would still gap on both sides of a collapsed, invisible-but-present
+    // module. Each of them carries its own leading margin instead, matching its own collapsed state.
+    spacing: 0
 
     Clock { id: clockMod }
     NotificationBell { id: bellMod; compact: root.compact }

@@ -24,8 +24,12 @@ Item {
     implicitWidth: pill.implicitWidth
     implicitHeight: pill.implicitHeight
     Layout.preferredWidth: collapsed ? 0 : implicitWidth
+    // Own leading gap rather than relying on CenterSection's RowLayout spacing: that stays uniform
+    // even while this collapses to zero width, which would otherwise leave its spacing on both sides.
+    Layout.leftMargin: collapsed ? 0 : Theme.sectionSpacing
 
     Behavior on Layout.preferredWidth { NumberAnimation { duration: Theme.animSlow; easing.type: Easing.OutCubic } }
+    Behavior on Layout.leftMargin { NumberAnimation { duration: Theme.animSlow; easing.type: Easing.OutCubic } }
     Behavior on opacity { NumberAnimation { duration: Theme.animSlow } }
 
     // Clip is scoped to this wrapper rather than `root` itself, so the unread badge below (which pokes
