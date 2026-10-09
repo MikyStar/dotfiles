@@ -37,6 +37,12 @@ Singleton {
         configFile.reload();
     }
 
+    // Note: weather.com has no URL/query param for units -- °C vs °F is a cookie set by
+    // manually toggling the switch on the site once, which then persists in the browser.
+    function open() {
+        Quickshell.execDetached(["firefox", `https://weather.com/en-GB/weather/hourbyhour/l/${root.latitude},${root.longitude}`]);
+    }
+
     FileView {
         id: configFile
         path: root.configPath
@@ -141,11 +147,18 @@ Singleton {
         }
     }
 
+    // Checked every minute rather than waited out as a single 1h interval: QML timers run on
+    // a monotonic clock that doesn't advance during suspend, so a bare 1h repeat can go long
+    // stretches of wall-clock time without firing on a machine that's mostly asleep. Polling
+    // wall-clock elapsed time instead makes refreshes self-correct right after resume.
     Timer {
-        interval: 3600000 // 1h
+        interval: 60000 // 1m
         running: true
         repeat: true
         triggeredOnStart: true
-        onTriggered: root.refresh()
+        onTriggered: {
+            if (isNaN(root.lastUpdated.getTime()) || Date.now() - root.lastUpdated.getTime() >= 3600000)
+                root.refresh();
+        }
     }
 }

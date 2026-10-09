@@ -26,12 +26,21 @@ Card {
 
     Rectangle { Layout.fillWidth: true; implicitHeight: 1; color: Colors.pillBorder }
 
-    // City name.
+    // City name -- clicking it opens weather.com at the configured location.
     Text {
         Layout.fillWidth: true
         text: WeatherService.city
         color: Colors.textDim
         font.family: Theme.fontFamily
         font.pixelSize: Theme.fontSize - 1
+        font.underline: cityArea.containsMouse
+
+        MouseArea {
+            id: cityArea
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+            onClicked: WeatherService.open()
+        }
     }
 }
