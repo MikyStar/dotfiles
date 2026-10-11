@@ -1,7 +1,13 @@
 local C = require("constants")
 
 hl.bind(C.mainMod .. " + Return", hl.dsp.exec_cmd(C.terminal))
-hl.bind(C.mainMod .. " + Space", hl.dsp.exec_cmd(C.launcher))
+
+-- Tap-SUPER-alone launcher: bound to the modifier key's own keysym with `release = true`, so it
+-- only fires once SUPER_L is released -- any other key pressed while SUPER is held (workspace
+-- switches, SUPER+Q, etc.) consumes that combo first and suppresses this release-bind, so the two
+-- never conflict even though they share the same modifier.
+hl.bind(C.mainMod .. " + SUPER_L", hl.dsp.exec_cmd(C.launcher), { release = true })
+hl.bind(C.mainMod .. " + SUPER_R", hl.dsp.exec_cmd(C.launcher), { release = true })
 hl.bind(C.mainMod .. " + SHIFT + V", hl.dsp.exec_cmd(C.clipboardMenu))
 hl.bind(C.mainMod .. " + Q", hl.dsp.window.close())
 hl.bind(C.mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))

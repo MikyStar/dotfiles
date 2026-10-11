@@ -16,6 +16,9 @@ Singleton {
     readonly property string appsFile: cacheDir + "/apps.tsv"
     readonly property string scriptsFile: cacheDir + "/scripts.tsv"
     readonly property string pathsFile: cacheDir + "/paths.tsv"
+    // Unlike the caches above, Recent has to survive a reboot, so it lives under Quickshell's
+    // (XDG state) stateDir rather than /tmp.
+    readonly property string recentFile: Quickshell.stateDir + "/finder-recent.json"
 
     readonly property var filterNames: ["Recent", "All", "Applications", "Paths", "Scripts"]
     readonly property int recentLimit: 10
@@ -38,8 +41,12 @@ Singleton {
     property double _pathsIndexedAt: 0
     // Last-activated app/path/script results, most-recent-first -- same shape as a normal result entry
     // so it can be displayed by ResultRow/composed into `results` without any special-casing there.
-    // Calc results are never pushed here (see activateSelected). Session-only: not persisted to disk.
+    // Calc results are never pushed here (see activateSelected). Persisted to recentFile (capped at
+    // recentLimit) so it survives a reboot; see _saveRecent/_hydrateRecent.
     property var _recent: []
+    // Raw parsed recentFile contents, before app entries are re-resolved against DesktopEntries --
+    // see _hydrateRecent.
+    property var _recentRaw: []
 
     property bool _filtering: false
     property bool _filterPending: false
@@ -116,6 +123,61 @@ Singleton {
     function _pushRecent(r) {
         const key = root._recentKey(r);
         root._recent = [r, ...root._recent.filter(e => root._recentKey(e) !== key)].slice(0, root.recentLimit);
+        root._saveRecent();
+    }
+
+    // Strips each entry down to its plain-data identity -- an app's `appEntry` is a DesktopEntries
+    // object, not JSON-serializable, so it's persisted as just its id and re-resolved on load (see
+    // _hydrateRecent). root._recent is already capped at recentLimit (see _pushRecent above), so
+    // this never writes more than that to disk.
+    function _saveRecent() {
+        const serializable = root._recent.map(r => {
+            if (r.kind === "app")
+                return { kind: "app", appId: r.appEntry.id ?? r.label, label: r.label, sublabel: r.sublabel };
+            if (r.kind === "path")
+                return { kind: "path", label: r.label, path: r.path, isDir: r.isDir };
+            return { kind: "script", label: r.label, path: r.path };
+        });
+        recentFileView.setText(JSON.stringify(serializable));
+    }
+
+    // Turns the persisted, plain-data entries back into full result rows. Path/script round-trip
+    // directly; an app entry re-resolves `appEntry` against root._apps by id, so this has to re-run
+    // every time _refreshApps rebuilds that list (an app no longer installed is just dropped).
+    function _hydrateRecent() {
+        const out = [];
+        for (const r of root._recentRaw) {
+            if (r.kind === "app") {
+                const a = root._apps.find(a => (a.appEntry.id ?? a.label) === r.appId);
+                if (a)
+                    out.push({ kind: "app", label: a.label, sublabel: a.sublabel, iconSource: a.iconSource, appEntry: a.appEntry });
+            } else if (r.kind === "path") {
+                out.push({ kind: "path", label: r.label, sublabel: r.path, icon: root._pathIcon(r.path, r.isDir), path: r.path, isDir: r.isDir });
+            } else if (r.kind === "script") {
+                out.push({ kind: "script", label: r.label, sublabel: r.path, path: r.path });
+            }
+        }
+        root._recent = out.slice(0, root.recentLimit);
+        if (root.filterIndex === 0)
+            root._runFilter();
+    }
+
+    // Loaded once at startup (preload below); re-resolved against apps every time _refreshApps runs.
+    // A missing file (first run) just means an empty Recent list, not an error.
+    FileView {
+        id: recentFileView
+        path: root.recentFile
+        preload: true
+        printErrors: false
+        onLoaded: {
+            try {
+                root._recentRaw = JSON.parse(text());
+            } catch (e) {
+                root._recentRaw = [];
+            }
+            root._hydrateRecent();
+        }
+        onLoadFailed: root._recentRaw = []
     }
 
     // For a folder, opens a terminal in the folder itself rather than its parent.
@@ -170,6 +232,7 @@ Singleton {
         }));
         const content = root._apps.map((a, i) => `app\t${i}\t${a.label}`).join("\n");
         _writeIndexFile(root.appsFile, content, appsWriteProc);
+        root._hydrateRecent();
     }
 
     Process {

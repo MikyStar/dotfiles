@@ -7,6 +7,10 @@ import Quickshell.Wayland
 import qs.style
 import qs.bar.components
 import qs.finder.components
+import qs.widgets.infos
+import qs.widgets.disk
+import qs.widgets.weather
+import qs.widgets.endpoints
 
 // Rofi replacement: a full-screen, click-catching overlay (dismissible via click-outside or Escape)
 // with a centered fuzzy-finder box, styled like the rest of the bar/widgets. Toggled from outside via
@@ -74,6 +78,33 @@ PanelWindow {
                 anchors.fill: parent
                 color: Colors.backdrop
             }
+        }
+
+        // Desktop widgets, brought along on the finder's blurred backdrop and slid in from their
+        // respective screen edge -- mirrors Infos/Disk (LeftWidgets.qml) and Weather/Endpoints
+        // (Widgets.qml), just re-shown here since the backdrop above would otherwise dim them out.
+        ColumnLayout {
+            id: leftWidgets
+            x: FinderService.visible ? Theme.widgetMargin : -implicitWidth - Theme.widgetMargin
+            y: (root.height - implicitHeight) / 2
+            spacing: Theme.widgetSpacing
+
+            Behavior on x { NumberAnimation { duration: Theme.animSlow; easing.type: Easing.OutCubic } }
+
+            Infos {}
+            Disk {}
+        }
+
+        ColumnLayout {
+            id: rightWidgets
+            x: FinderService.visible ? root.width - implicitWidth - Theme.widgetMargin : root.width + Theme.widgetMargin
+            y: (root.height - implicitHeight) / 2
+            spacing: Theme.widgetSpacing
+
+            Behavior on x { NumberAnimation { duration: Theme.animSlow; easing.type: Easing.OutCubic } }
+
+            Weather {}
+            Endpoints {}
         }
 
         Rectangle {

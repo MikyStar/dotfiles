@@ -60,7 +60,7 @@ Singleton {
     readonly property int clipboardRowHeight: 36
 
     // Finder overlay
-    readonly property int finderWidth: 640
+    readonly property int finderWidth: 560
     readonly property int finderMaxResultRows: 8
     readonly property int finderResultRowHeight: 44
     // Fraction of screen height down from the top. Deliberately independent of the box's own (variable,
